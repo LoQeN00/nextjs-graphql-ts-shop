@@ -13,6 +13,7 @@ const DATA = {
   thumbnailUrl: `https://picsum.photos/id/1060/536/354`,
   thumbnailAlt: `Barista lejący kawę`,
   rating: 6,
+  title: 'Przykładowy tytuł',
 };
 
 const Home = () => {

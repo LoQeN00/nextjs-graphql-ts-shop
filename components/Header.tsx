@@ -10,6 +10,7 @@ export const Header = (props: Props) => {
       <nav className="bg-gray-700 px-4 py-2 text-white space-x-5">
         <Navlink href="/" text="Home" />
         <Navlink href="/about" text="About" />
+        <Navlink href="/products" text="Products" />
       </nav>
     </header>
   );
