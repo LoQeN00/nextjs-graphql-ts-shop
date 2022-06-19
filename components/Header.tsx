@@ -11,6 +11,7 @@ export const Header = (props: Props) => {
         <Navlink href="/" text="Home" />
         <Navlink href="/about" text="About" />
         <Navlink href="/products" text="Products" />
+        <Navlink href="/products-csr" text="Products CSR" />
       </nav>
     </header>
   );
