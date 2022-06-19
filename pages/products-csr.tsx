@@ -4,7 +4,7 @@ import { Main } from '../components/Main';
 import { Footer } from '../components/Footer';
 import { ProductListItem } from '../components/ProductListItem';
 import { useQuery } from 'react-query';
-import { Pagination } from '../components/Pagination';
+import { PaginationCSR } from '../components/PaginationCSR';
 
 interface StoreApiResponse {
   id: number;
@@ -61,7 +61,7 @@ const ProductsCSRPage = () => {
           </ul>
         )}
       </Main>
-      <Pagination setPagination={setPagination} actualPage={pagination.actualPage} />
+      <PaginationCSR setPagination={setPagination} actualPage={pagination.actualPage} />
       <Footer />
     </div>
   );
