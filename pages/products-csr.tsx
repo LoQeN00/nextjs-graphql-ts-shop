@@ -27,9 +27,10 @@ const getProducts = async (take: number, offset: number) => {
 };
 
 const ProductsCSRPage = () => {
-  const [pagination, setPagination] = useState<{ take: number; offset: number }>({
+  const [pagination, setPagination] = useState<{ take: number; offset: number; actualPage: number }>({
     take: 25,
     offset: 0,
+    actualPage: 0,
   });
 
   const { data, isLoading, error } = useQuery(['products', pagination], () =>
@@ -60,7 +61,7 @@ const ProductsCSRPage = () => {
           </ul>
         )}
       </Main>
-      <Pagination setPagination={setPagination} />
+      <Pagination setPagination={setPagination} actualPage={pagination.actualPage} />
       <Footer />
     </div>
   );
