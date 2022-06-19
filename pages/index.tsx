@@ -1,7 +1,7 @@
 import React from 'react';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
-import { Product } from '../components/Product';
+import { ProductListItem } from '../components/ProductListItem';
 import { Main } from '../components/Main';
 
 const DATA = {
@@ -21,7 +21,7 @@ const Home = () => {
     <div className="flex flex-col min-h-screen bg-teal-100">
       <Header />
       <Main>
-        <Product data={DATA} />
+        <ProductListItem data={DATA} />
       </Main>
       <Footer />
     </div>
