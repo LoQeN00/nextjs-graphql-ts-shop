@@ -5,6 +5,7 @@ import { Footer } from '../components/Footer';
 import { ProductListItem } from '../components/ProductListItem';
 import { useQuery } from 'react-query';
 import { PaginationCSR } from '../components/PaginationCSR';
+import Link from 'next/link';
 
 interface StoreApiResponse {
   id: number;
@@ -48,15 +49,17 @@ const ProductsCSRPage = () => {
         ) : (
           <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
             {data?.map((product) => (
-              <li key={product.id} className="shadow-xl border-2 p-5">
-                <ProductListItem
-                  data={{
-                    thumbnailAlt: product.title,
-                    thumbnailUrl: product.image,
-                    title: product.title,
-                  }}
-                />
-              </li>
+              <Link key={product.id} passHref href={`/product/${product.id}`}>
+                <li key={product.id} className="shadow-xl border-2 p-5">
+                  <ProductListItem
+                    data={{
+                      thumbnailAlt: product.title,
+                      thumbnailUrl: product.image,
+                      title: product.title,
+                    }}
+                  />
+                </li>
+              </Link>
             ))}
           </ul>
         )}

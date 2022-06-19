@@ -22,14 +22,13 @@ interface StoreApiResponse {
 }
 
 const ProductsPage = ({ data, pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  console.log(data);
   return (
     <div className="flex flex-col min-h-screen bg-teal-100">
       <Header />
       <Main>
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
           {data?.map((product) => (
-            <Link key={product.id} passHref href={`/products/${product.id}`}>
+            <Link key={product.id} passHref href={`/product/${product.id}`}>
               <li className="shadow-xl border-2 p-5">
                 <ProductListItem
                   data={{
@@ -53,8 +52,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ pageInd
   if (!params?.pageIndex) return { props: {}, notFound: true };
 
   const pageIndex = parseInt(params.pageIndex);
-
-  console.log(`https://naszsklep-api.vercel.app/api/products?take=25&offset=${pageIndex * 25}`);
 
   const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=25&offset=${pageIndex * 25}`);
   const data: StoreApiResponse[] = await res.json();
