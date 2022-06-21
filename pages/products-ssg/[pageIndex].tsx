@@ -7,7 +7,6 @@ import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { ProductListItem } from '../../components/ProductListItem';
 import Link from 'next/link';
 import { QueryClient, dehydrate, useQuery } from 'react-query';
-import { useRouter } from 'next/router';
 
 interface StoreApiResponse {
   id: number;
@@ -39,7 +38,7 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
       <Header />
       <Main>
         {isLoading && <div>Loading ...</div>}
-        {isError && <div>We couldnt find more items</div>}
+        {!data?.length && <div>We couldnt find more items</div>}
         {isSuccess && (
           <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
             {data?.map((product) => (
@@ -58,7 +57,8 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
           </ul>
         )}
       </Main>
-      <PaginationSSG pageIndex={pageIndex!} />
+      {data?.length! > 0 && <PaginationSSG pageIndex={pageIndex!} />}
+
       <Footer />
     </div>
   );
