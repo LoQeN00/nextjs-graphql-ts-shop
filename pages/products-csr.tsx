@@ -34,8 +34,12 @@ const ProductsCSRPage = () => {
     actualPage: 0,
   });
 
-  const { data, isLoading, error } = useQuery(['products', pagination], () =>
-    getProducts(pagination.take, pagination.offset)
+  const { data, isLoading, error, isPreviousData } = useQuery(
+    ['products', pagination],
+    () => getProducts(pagination.take, pagination.offset),
+    {
+      keepPreviousData: true,
+    }
   );
 
   if (error) return <div>Coś poszło nie tak</div>;
@@ -64,7 +68,7 @@ const ProductsCSRPage = () => {
           </ul>
         )}
       </Main>
-      <PaginationCSR setPagination={setPagination} actualPage={pagination.actualPage} />
+      <PaginationCSR setPagination={setPagination} actualPage={pagination.actualPage} isPreviousData={isPreviousData} />
       <Footer />
     </div>
   );

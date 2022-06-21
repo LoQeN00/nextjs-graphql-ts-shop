@@ -6,6 +6,8 @@ import { PaginationSSG } from '../../components/PaginationSSG';
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { ProductListItem } from '../../components/ProductListItem';
 import Link from 'next/link';
+import { QueryClient, dehydrate, useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
 interface StoreApiResponse {
   id: number;
@@ -21,26 +23,40 @@ interface StoreApiResponse {
   };
 }
 
-const ProductsPage = ({ data, pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const getProducts = async (take: number, offset: number) => {
+  const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=${take}&offset=${offset}`);
+  const data: StoreApiResponse[] = await res.json();
+  return data;
+};
+
+const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data, isLoading, isError, isSuccess } = useQuery('products', () => getProducts(25, pageIndex! * 25), {
+    staleTime: Infinity,
+  });
+
   return (
     <div className="flex flex-col min-h-screen bg-teal-100">
       <Header />
       <Main>
-        <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
-          {data?.map((product) => (
-            <Link key={product.id} passHref href={`/product/${product.id}`}>
-              <li className="shadow-xl border-2 p-5">
-                <ProductListItem
-                  data={{
-                    thumbnailAlt: product.title,
-                    thumbnailUrl: product.image,
-                    title: product.title,
-                  }}
-                />
-              </li>
-            </Link>
-          ))}
-        </ul>
+        {isLoading && <div>Loading ...</div>}
+        {isError && <div>We couldnt find more items</div>}
+        {isSuccess && (
+          <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
+            {data?.map((product) => (
+              <Link key={product.id} passHref href={`/product/${product.id}`}>
+                <li className="shadow-xl border-2 p-5">
+                  <ProductListItem
+                    data={{
+                      thumbnailAlt: product.title,
+                      thumbnailUrl: product.image,
+                      title: product.title,
+                    }}
+                  />
+                </li>
+              </Link>
+            ))}
+          </ul>
+        )}
       </Main>
       <PaginationSSG pageIndex={pageIndex!} />
       <Footer />
@@ -52,13 +68,13 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ pageInd
   if (!params?.pageIndex) return { props: {}, notFound: true };
 
   const pageIndex = parseInt(params.pageIndex);
+  const queryClient = new QueryClient();
 
-  const res = await fetch(`https://naszsklep-api.vercel.app/api/products?take=25&offset=${pageIndex * 25}`);
-  const data: StoreApiResponse[] = await res.json();
+  await queryClient.prefetchQuery('products', () => getProducts(25, pageIndex * 25));
 
   return {
     props: {
-      data,
+      dehydratedState: dehydrate(queryClient),
       pageIndex,
     },
   };
