@@ -29,9 +29,7 @@ const getProducts = async (take: number, offset: number) => {
 };
 
 const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data, isLoading, isError, isSuccess } = useQuery('products', () => getProducts(25, pageIndex! * 25), {
-    staleTime: Infinity,
-  });
+  const { data, isLoading, isSuccess } = useQuery('products', () => getProducts(25, pageIndex! * 25));
 
   return (
     <div className="flex flex-col min-h-screen bg-teal-100">
@@ -57,7 +55,7 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
           </ul>
         )}
       </Main>
-      {data?.length! > 0 && <PaginationSSG pageIndex={pageIndex!} />}
+      <PaginationSSG pageIndex={pageIndex!} />
 
       <Footer />
     </div>
