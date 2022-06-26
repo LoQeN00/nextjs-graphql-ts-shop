@@ -41,7 +41,7 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
           <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
             {data?.map((product) => (
               <Link key={product.id} passHref href={`/product/${product.id}`}>
-                <li className="shadow-xl border-2 p-5">
+                <li className="shadow-xl border-2">
                   <ProductListItem
                     data={{
                       thumbnailAlt: product.title,

@@ -20,7 +20,7 @@ export const PageCSR = ({ nextPage, setPagination, actualPage, isPreviousData }:
   return (
     <button
       onClick={() => changePage(nextPage)}
-      className={`p-5 ${nextPage === actualPage ? 'bg-red-500' : 'bg-black'}  text-white`}
+      className={`p-5 ${nextPage === actualPage ? 'bg-red-500' : 'bg-black'}  text-white m-2`}
       disabled={isPreviousData}
     >
       <p>{nextPage + 1}</p>

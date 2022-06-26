@@ -24,7 +24,7 @@ interface StoreApiResponse {
 
 export const PaginationCSR = ({ setPagination, actualPage, isPreviousData }: Props) => {
   return (
-    <div className="flex justify-center items-center p-5 space-x-5">
+    <div className="flex justify-center items-center p-5 space-x-5 flex-wrap">
       <PageCSR setPagination={setPagination} nextPage={0} actualPage={actualPage} isPreviousData={isPreviousData} />
       <PageCSR setPagination={setPagination} nextPage={1} actualPage={actualPage} isPreviousData={isPreviousData} />
       <PageCSR setPagination={setPagination} nextPage={2} actualPage={actualPage} isPreviousData={isPreviousData} />
