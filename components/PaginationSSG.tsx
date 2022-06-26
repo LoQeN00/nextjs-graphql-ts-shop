@@ -7,7 +7,7 @@ type Props = {
 
 export const PaginationSSG = ({ pageIndex }: Props) => {
   return (
-    <div className="flex justify-center items-center p-5 space-x-5">
+    <div className="flex justify-center items-center p-5 space-x-5 max-w-full flex-wrap">
       <PageSSG actualPage={pageIndex} nextPage={0} />
       <PageSSG actualPage={pageIndex} nextPage={1} />
       <PageSSG actualPage={pageIndex} nextPage={2} />
