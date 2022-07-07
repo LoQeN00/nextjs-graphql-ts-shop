@@ -7,7 +7,7 @@ const nextSeoConfig = {
   openGraph: {
     title,
     description,
-    site_name: 'Skelp Odzieżwoy',
+    site_name: title,
   },
 };
 
