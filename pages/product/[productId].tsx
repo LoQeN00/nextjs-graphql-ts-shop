@@ -46,7 +46,7 @@ const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticPr
               type: 'image/jpeg',
             },
           ],
-          site_name: 'SiteName',
+          site_name: 'Sklep Odzieżowy',
         }}
       />
       <ProductDetails
