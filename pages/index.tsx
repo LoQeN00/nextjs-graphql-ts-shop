@@ -3,6 +3,7 @@ import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { ProductListItem } from '../components/ProductListItem';
 import { Main } from '../components/Main';
+import { Layout } from '../components/Layout';
 
 const DATA = {
   description: ` Lorem ipsum dolor sit amet. Qui expedita aperiam aut voluptas vero qui repellat rerum est modi nihil ut
@@ -17,15 +18,7 @@ const DATA = {
 };
 
 const Home = () => {
-  return (
-    <div className="flex flex-col min-h-screen bg-teal-100">
-      <Header />
-      <Main>
-        <ProductListItem data={DATA} />
-      </Main>
-      <Footer />
-    </div>
-  );
+  return <ProductListItem data={DATA} />;
 };
 
 export default Home;

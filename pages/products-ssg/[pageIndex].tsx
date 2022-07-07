@@ -32,33 +32,29 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
   const { data, isLoading, isSuccess } = useQuery('products', () => getProducts(25, pageIndex! * 25));
 
   return (
-    <div className="flex flex-col min-h-screen bg-teal-100">
-      <Header />
-      <Main>
-        {isLoading && <div>Loading ...</div>}
-        {!data?.length && <div>We couldnt find more items</div>}
-        {isSuccess && (
-          <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
-            {data?.map((product) => (
-              <Link key={product.id} passHref href={`/product/${product.id}`}>
-                <li className="shadow-2xl border-2">
-                  <ProductListItem
-                    data={{
-                      thumbnailAlt: product.title,
-                      thumbnailUrl: product.image,
-                      title: product.title,
-                    }}
-                  />
-                </li>
-              </Link>
-            ))}
-          </ul>
-        )}
-      </Main>
-      <PaginationSSG pageIndex={pageIndex!} />
+    <>
+      {isLoading && <div>Loading ...</div>}
+      {!data?.length && <div>We couldnt find more items</div>}
+      {isSuccess && (
+        <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
+          {data?.map((product) => (
+            <Link key={product.id} passHref href={`/product/${product.id}`}>
+              <li className="shadow-2xl border-2">
+                <ProductListItem
+                  data={{
+                    thumbnailAlt: product.title,
+                    thumbnailUrl: product.image,
+                    title: product.title,
+                  }}
+                />
+              </li>
+            </Link>
+          ))}
+        </ul>
+      )}
 
-      <Footer />
-    </div>
+      <PaginationSSG pageIndex={pageIndex!} />
+    </>
   );
 };
 

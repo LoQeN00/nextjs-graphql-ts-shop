@@ -6,15 +6,7 @@ import { Main } from '../components/Main';
 type Props = {};
 
 const AboutPage = (props: Props) => {
-  return (
-    <div className="flex flex-col min-h-screen bg-teal-100">
-      <Header />
-      <Main>
-        <p>Siema</p>
-      </Main>
-      <Footer />
-    </div>
-  );
+  return <p>Siema</p>;
 };
 
 export default AboutPage;
