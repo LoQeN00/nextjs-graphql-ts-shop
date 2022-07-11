@@ -7,7 +7,7 @@ const CartSummary = (props: Props) => {
   const { items } = useCartContext();
 
   const fullPrice = items.reduce((actualPrice, item) => {
-    return actualPrice + item.price;
+    return actualPrice + item.price * item.count;
   }, 0);
 
   return (
