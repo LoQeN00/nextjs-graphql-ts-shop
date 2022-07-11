@@ -38,17 +38,17 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
       {isSuccess && (
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
           {data?.map((product) => (
-            <Link key={product.id} passHref href={`/product/${product.id}`}>
-              <li className="shadow-2xl border-2">
-                <ProductListItem
-                  data={{
-                    thumbnailAlt: product.title,
-                    thumbnailUrl: product.image,
-                    title: product.title,
-                  }}
-                />
-              </li>
-            </Link>
+            <li className="shadow-2xl border-2" key={product.id}>
+              <ProductListItem
+                data={{
+                  id: product.id,
+                  thumbnailAlt: product.title,
+                  thumbnailUrl: product.image,
+                  title: product.title,
+                  price: product.price,
+                }}
+              />
+            </li>
           ))}
         </ul>
       )}

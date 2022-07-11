@@ -15,6 +15,8 @@ const DATA = {
   thumbnailAlt: `Barista lejący kawę`,
   rating: 6,
   title: 'Przykładowy tytuł',
+  id: 123,
+  price: 123,
 };
 
 const Home = () => {

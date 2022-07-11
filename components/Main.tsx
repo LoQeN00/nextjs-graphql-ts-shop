@@ -5,5 +5,5 @@ interface MainProps {
 }
 
 export const Main = ({ children }: MainProps) => {
-  return <main className="flex-1 max-w-7xl mx-auto p-6">{children}</main>;
+  return <main className="flex-1 max-w-7xl mx-auto p-6 w-full">{children}</main>;
 };

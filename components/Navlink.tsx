@@ -11,7 +11,7 @@ export const Navlink = ({ href, text }: Props) => {
   const router = useRouter();
   return (
     <Link href={href}>
-      <a className={router.pathname === href ? `text-teal-500` : ``}>{text}</a>
+      <a className={router.pathname === href ? `text-teal-500 text-xl` : `text-xl`}>{text}</a>
     </Link>
   );
 };
