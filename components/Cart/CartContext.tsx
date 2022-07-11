@@ -12,6 +12,7 @@ interface CartState {
   readonly items: readonly CartItem[];
   readonly addItemToCart: (product: CartItem) => void;
   readonly removeItemFromCart: (id: CartItem['id']) => void;
+  readonly clearCart: () => void;
 }
 
 export const CartContext = createContext<CartState | null>(null);
@@ -32,7 +33,7 @@ const getCartItemsFromStorage = () => {
   }
 };
 
-const setCartItemsInStorage = (items: CartItem[]) => {
+const setCartItemsInStorage = (items: CartItem[] | []) => {
   if (!items) return;
   localStorage.setItem('SHOPPING_CART', JSON.stringify(items));
 };
@@ -99,10 +100,16 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     });
   };
 
+  const clearCart = () => {
+    setCartItemsInStorage([]);
+    setCartItems([]);
+  };
+
   const value = {
     items: cartItems,
     addItemToCart,
     removeItemFromCart,
+    clearCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
