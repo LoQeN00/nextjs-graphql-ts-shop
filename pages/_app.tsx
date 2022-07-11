@@ -13,8 +13,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <CartContextProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <CartContextProvider>
         <Hydrate state={pageProps.dehydratedState}>
           <Layout>
             <DefaultSeo {...SEO} />
@@ -32,8 +32,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             />
           </Layout>
         </Hydrate>
-      </QueryClientProvider>
-    </CartContextProvider>
+      </CartContextProvider>
+    </QueryClientProvider>
   );
 }
 

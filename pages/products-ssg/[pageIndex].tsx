@@ -29,12 +29,15 @@ const getProducts = async (take: number, offset: number) => {
 };
 
 const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data, isLoading, isSuccess } = useQuery('products', () => getProducts(25, pageIndex! * 25));
+  const { data, isLoading, isSuccess, isPreviousData } = useQuery(['products', pageIndex], () =>
+    getProducts(25, pageIndex! * 25)
+  );
+
+  console.log(data);
 
   return (
     <>
       {isLoading && <div>Loading ...</div>}
-      {!data?.length && <div>We couldnt find more items</div>}
       {isSuccess && (
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
           {data?.map((product) => (
