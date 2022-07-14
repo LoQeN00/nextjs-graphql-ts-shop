@@ -7,6 +7,7 @@ import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { ProductListItem } from '../../components/ProductListItem';
 import Link from 'next/link';
 import { QueryClient, dehydrate, useQuery } from 'react-query';
+import { checkProducts } from '../../lib/checkProducts';
 
 interface StoreApiResponse {
   id: number;
@@ -28,16 +29,19 @@ const getProducts = async (take: number, offset: number) => {
   return data;
 };
 
-const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductsPage = ({ pageIndex, pages  }: InferGetStaticPropsType<typeof getStaticProps>) => {
+
+  console.log(pages)
+
   const { data, isLoading, isSuccess, isPreviousData } = useQuery(['products', pageIndex], () =>
     getProducts(25, pageIndex! * 25)
   );
 
-  console.log(data);
-
+  
   return (
     <>
       {isLoading && <div>Loading ...</div>}
+      {data?.length === 0 && <div>No data</div>}
       {isSuccess && (
         <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 grid-cols-1 ">
           {data?.map((product) => (
@@ -56,7 +60,7 @@ const ProductsPage = ({ pageIndex }: InferGetStaticPropsType<typeof getStaticPro
         </ul>
       )}
 
-      <PaginationSSG pageIndex={pageIndex!} />
+      <PaginationSSG pageIndex={pageIndex!} pages={pages!} />
     </>
   );
 };
@@ -69,10 +73,13 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ pageInd
 
   await queryClient.prefetchQuery('products', () => getProducts(25, pageIndex * 25));
 
+  const pages = await checkProducts()
+
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
       pageIndex,
+      pages: Math.floor(pages/25)
     },
   };
 };
@@ -80,7 +87,9 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ pageInd
 export const getStaticPaths = async () => {
   const paths = [];
 
-  for (let i = 0; i < 10; i++) {
+  const pages = await checkProducts();
+
+  for (let i = 0; i < Math.floor(pages/25); i++) {
     paths.push({ params: { pageIndex: i.toString() } });
   }
 

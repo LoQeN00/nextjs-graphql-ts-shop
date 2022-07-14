@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Footer } from '../components/Footer';
 import { Header } from '../components/Header';
 import { ProductListItem } from '../components/ProductListItem';
 import { Main } from '../components/Main';
 import { Layout } from '../components/Layout';
+import {checkProducts} from "../lib/checkProducts"
 
 const DATA = {
   description: ` Lorem ipsum dolor sit amet. Qui expedita aperiam aut voluptas vero qui repellat rerum est modi nihil ut
@@ -20,6 +21,16 @@ const DATA = {
 };
 
 const Home = () => {
+
+  useEffect(() => {
+    const main = async () => {
+     const result =  await checkProducts();
+     console.log(Math.ceil(result/25))
+    }
+    main();
+  },[])
+
+  checkProducts()
   return <ProductListItem data={DATA} />;
 };
 
