@@ -5,7 +5,7 @@ import { useCartContext } from './Cart/useCartContext';
 import Link from 'next/link';
 
 interface ProductDetailsType {
-  id: number;
+  id: string;
   title: string;
   thumbnailUrl: string;
   thumbnailAlt: string;

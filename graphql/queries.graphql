@@ -1,0 +1,30 @@
+query GetProductsList {
+  products {
+    id
+    name
+    price
+    description
+    slug
+    images {
+      url
+    }
+  }
+}
+
+query getProductById($id: ID!) {
+  product(where: { id: $id }) {
+    id
+    name
+    description
+    images {
+      url
+    }
+    price
+  }
+}
+
+query GetProductsIds {
+  products {
+    id
+  }
+}

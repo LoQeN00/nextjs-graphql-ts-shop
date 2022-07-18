@@ -4,18 +4,21 @@ import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { ProductDetails } from '../../components/ProductDetails';
 import { serialize } from 'next-mdx-remote/serialize';
 import { NextSeo } from 'next-seo';
-import {client} from "../../graphql/apolloClient";
-import { gql } from '@apollo/client';
+import { client } from '../../graphql/apolloClient';
+import {
+  GetProductsIdsDocument,
+  GetProductsIdsQuery,
+  GetProductByIdDocument,
+  GetProductByIdQuery,
+  GetProductByIdQueryVariables,
+} from '../../generated/graphql';
 
 type Props = {};
 
-
-
-const ProductDetailsPage = ({data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
 
   if (!data) return <div>Nie znaleziono produktu</div>;
-  
 
   return (
     <div>
@@ -25,11 +28,11 @@ const ProductDetailsPage = ({data }: InferGetStaticPropsType<typeof getStaticPro
         canonical={`https://nextjs-graphql-ts-shop.vercel.app/product/${data.id}`}
         openGraph={{
           url: `https://nextjs-graphql-ts-shop.vercel.app/product/${data.id}`,
-          title: data.title,
+          title: data.name,
           description: data.description,
           images: [
             {
-              url: data.image,
+              url: data.images[0].url,
               width: 800,
               height: 600,
               alt: data.description,
@@ -42,31 +45,22 @@ const ProductDetailsPage = ({data }: InferGetStaticPropsType<typeof getStaticPro
       <ProductDetails
         data={{
           description: data.longDescription,
-          thumbnailAlt: data?.name,
-          thumbnailUrl: data?.images[0]?.url,
-          title: data?.name,
+          thumbnailAlt: data.name,
+          thumbnailUrl: data.images[0]?.url,
+          title: data.name,
         }}
       />
     </div>
-  )
+  );
 };
 
 export default ProductDetailsPage;
 
 export const getStaticPaths = async () => {
+  const { data } = await client.query<GetProductsIdsQuery>({ query: GetProductsIdsDocument });
 
-  const GET_PRODUCTS = gql`
-        query GetProductsListIds {
-            products {
-                id
-            }
-        }
-    `
-
-  const { data } = await client.query({query: GET_PRODUCTS})
-
-  const paths = data?.products.map((item: any) => {
-    return { params: { productId: item.id.toString()} };
+  const paths = data?.products.map((item) => {
+    return { params: { productId: item.id.toString() } };
   });
 
   return {
@@ -78,36 +72,24 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }: GetStaticPropsContext<{ productId: string }>) => {
   if (!params?.productId) return { props: {}, notFound: true };
 
-  const GET_PRODUCT = gql`
-    query($id: ID!) {
-      product(where: {id: $id}) {
-        id
-        name
-        description
-        images {
-          url
-        }
-        price
-      }
-    }
-  `
-  const {data, error} = await client.query({query: GET_PRODUCT, variables: {id: params.productId}})
+  const { data, error } = await client.query<GetProductByIdQuery, GetProductByIdQueryVariables>({
+    query: GetProductByIdDocument,
+    variables: { id: params.productId },
+  });
 
-  if (!data) {
+  if (!data || !data.product) {
     return {
       props: {},
       notFound: true,
     };
   }
 
-
   return {
     props: {
       data: {
         ...data.product,
-        longDescription: await serialize(data.product.description),
+        longDescription: await serialize(data.product?.description),
       },
     },
   };
-
 };
