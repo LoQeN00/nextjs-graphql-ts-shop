@@ -15,9 +15,10 @@ interface ProductDetailsType {
   };
   description: string;
   price: number;
+  slug: string;
 }
 
-type ProductListItem = Pick<ProductDetailsType, 'title' | 'thumbnailUrl' | 'thumbnailAlt' | 'price' | 'id'>;
+type ProductListItem = Pick<ProductDetailsType, 'title' | 'thumbnailUrl' | 'thumbnailAlt' | 'price' | 'id' | 'slug'>;
 
 interface ProductListItemProps {
   data: ProductListItem;

@@ -12,7 +12,7 @@ export const Header = (props: Props) => {
         <div className="space-x-6">
           <Navlink href="/" text="Home" />
           <Navlink href="/about" text="About" />
-          <Navlink href="/products-ssg/0" text="Products" />
+          <Navlink href="/products-graphql" text="Products" />
         </div>
         <div>
           <Cart />

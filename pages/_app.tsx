@@ -8,11 +8,15 @@ import SEO from '../next-seo.config';
 import { CartContextProvider } from '../components/Cart/CartContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ApolloProvider } from '@apollo/client';
+import { client } from '../graphql/apolloClient';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
+    <ApolloProvider client={client}>
     <QueryClientProvider client={queryClient}>
       <CartContextProvider>
         <Hydrate state={pageProps.dehydratedState}>
@@ -34,6 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </Hydrate>
       </CartContextProvider>
     </QueryClientProvider>
+    </ApolloProvider>
   );
 }
 
