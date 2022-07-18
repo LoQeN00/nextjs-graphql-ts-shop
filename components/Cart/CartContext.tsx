@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 interface CartItem {
-  readonly id: number;
+  readonly id: string;
   readonly price: number;
   readonly title: string;
   readonly count: number;
