@@ -28,7 +28,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
   const { addItemToCart } = useCartContext();
 
   return (
-    <div className="flex flex-col justify-center items-center pb-4">
+    <div className="flex flex-col justify-center items-center pb-4 group">
       <Link passHref href={`/product/${data.id}`}>
         <div className="bg-white p-4 cursor-pointer w-full">
           <Image
@@ -38,6 +38,7 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
             width={4}
             height={3}
             objectFit="contain"
+            className="group-hover:scale-110 transition-all ease-in-out"
           />
         </div>
       </Link>
