@@ -6,22 +6,28 @@ import * as yup from 'yup';
 
 type Props = {};
 
+yup.setLocale({
+  mixed: {
+    required: 'To Pole jest wymagane',
+  },
+});
+
 const schema = yup
   .object()
   .shape({
-    email: yup.string().email('Nieprawidłowy email').required('To Pole jest wymagane'),
-    nameOnCard: yup.string().required('To Pole jest wymagane').typeError('Nieprawidłowe dane'),
-    cardNumber: yup.number().required('To Pole jest wymagane').typeError('Nieprawidłowe dane'),
-    expirationDate: yup.string().required('To Pole jest wymagane'),
-    cvc: yup.number().required('To Pole jest wymagane').typeError('Nieprawidłowe dane'),
-    company: yup.string().required('To Pole jest wymagane'),
-    address: yup.string().required('To Pole jest wymagane'),
-    apartament: yup.string().required('To Pole jest wymagane'),
-    city: yup.string().required('To Pole jest wymagane'),
-    state: yup.string().required('To Pole jest wymagane'),
+    email: yup.string().email().required(),
+    nameOnCard: yup.string().required().typeError('Nieprawidłowe dane'),
+    cardNumber: yup.number().required().typeError('Nieprawidłowe dane'),
+    expirationDate: yup.string().required(),
+    cvc: yup.number().required().typeError('Nieprawidłowe dane'),
+    company: yup.string().required(),
+    address: yup.string().required(),
+    apartament: yup.string().required(),
+    city: yup.string().required(),
+    state: yup.string().required(),
     zip: yup
       .string()
-      .required('To Pole jest wymagane')
+      .required()
       .matches(/^[0-9]{2}-[0-9]{3}$/, 'Nieprawidłowy kod pocztowy'),
     sameAsShipping: yup.boolean().required('To Pole jest wymagane'),
   })
