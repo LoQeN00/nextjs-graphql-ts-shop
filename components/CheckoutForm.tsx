@@ -12,21 +12,23 @@ yup.setLocale({
   },
 });
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  nameOnCard: yup.string().required(),
-  cardNumber: yup.number().required(),
-  expirationDate: yup.string().required(),
-  cvc: yup.number().required(),
-  company: yup.string().required(),
-  address: yup.string().required(),
-  apartament: yup.string().required(),
-  city: yup.string().required(),
-  state: yup.string().required(),
-  zip: yup.string().required(),
-
-  sameAsShipping: yup.boolean().required(),
-});
+const schema = yup
+  .object()
+  .shape({
+    email: yup.string().email().required(),
+    nameOnCard: yup.string().required(),
+    cardNumber: yup.number().required(),
+    expirationDate: yup.string().required(),
+    cvc: yup.number().required(),
+    company: yup.string().required(),
+    address: yup.string().required(),
+    apartament: yup.string().required(),
+    city: yup.string().required(),
+    state: yup.string().required(),
+    zip: yup.string().required(),
+    sameAsShipping: yup.boolean().required(),
+  })
+  .required();
 
 export type CheckoutFormData = yup.InferType<typeof schema>;
 
@@ -69,7 +71,13 @@ const CheckoutForm = (props: Props) => {
         <h2 className="text-xl">Billing information</h2>
         <div>
           <label htmlFor="sameAsShipping">
-            <input type="checkbox" className="form-checkbox" id="sameAsShipping" /> Same as shipping address
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              id="sameAsShipping"
+              {...methods.register('sameAsShipping')}
+            />{' '}
+            Same as shipping address
           </label>
         </div>
         <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">

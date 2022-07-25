@@ -22,11 +22,13 @@ type Props = {
   pattern?: string;
 };
 
-const Input = ({ className, type, id, label, pattern }: Props) => {
+const Input = ({ className, type, id, label }: Props) => {
   const {
     register,
+    getFieldState,
     formState: { errors },
   } = useFormContext<CheckoutFormData>();
+
   return (
     <div className="space-y-1 relative">
       <p>
@@ -34,7 +36,7 @@ const Input = ({ className, type, id, label, pattern }: Props) => {
           {label}
         </label>
       </p>
-      <input pattern={pattern} {...register(id)} type={type} id={id} className={`form-input rounded ${className}`} />
+      <input {...register(id)} type={type} id={id} className={`form-input rounded ${className}`} />
       {errors[id] && <p className="text-red-500 font-bold absolute">{errors[id]?.message}</p>}
     </div>
   );
