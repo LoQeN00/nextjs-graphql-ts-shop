@@ -19,22 +19,23 @@ type Props = {
     | 'zip'
     | 'sameAsShipping';
   label: string;
+  pattern?: string;
 };
 
-const Input = ({ className, type, id, label }: Props) => {
+const Input = ({ className, type, id, label, pattern }: Props) => {
   const {
     register,
     formState: { errors },
   } = useFormContext<CheckoutFormData>();
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 relative">
       <p>
         <label htmlFor={id} className="font-semibold">
           {label}
         </label>
       </p>
-      <input {...register(id)} type={type} id={id} className={`form-input rounded ${className}`} />
-      {errors[id] && <p className="text-red-500 font-bold">{errors[id]?.message}</p>}
+      <input pattern={pattern} {...register(id)} type={type} id={id} className={`form-input rounded ${className}`} />
+      {errors[id] && <p className="text-red-500 font-bold absolute">{errors[id]?.message}</p>}
     </div>
   );
 };

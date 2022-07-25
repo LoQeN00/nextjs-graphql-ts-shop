@@ -19,7 +19,10 @@ const schema = yup
     apartament: yup.string().required('To Pole jest wymagane'),
     city: yup.string().required('To Pole jest wymagane'),
     state: yup.string().required('To Pole jest wymagane'),
-    zip: yup.string().required('To Pole jest wymagane'),
+    zip: yup
+      .string()
+      .required('To Pole jest wymagane')
+      .matches(/^[0-9]{2}-[0-9]{3}$/, 'Nieprawidłowy kod pocztowy'),
     sameAsShipping: yup.boolean().required('To Pole jest wymagane'),
   })
   .required();
@@ -41,7 +44,7 @@ const CheckoutForm = (props: Props) => {
         <h2 className="text-xl ">Payment details</h2>
         <Input className="w-full" id="nameOnCard" type="text" label="Name on card" />
         <Input className="w-full" id="cardNumber" type="text" label="Card number" />
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-2 lg:space-y-0">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-8 lg:space-y-0">
           <Input className="w-full lg:w-[90%]" id="expirationDate" type="text" label="Expiration date" />
           <Input className="w-full lg:w-[90%]" id="cvc" type="text" label="CVC" />
         </div>
@@ -49,7 +52,7 @@ const CheckoutForm = (props: Props) => {
         <Input className="w-full" id="company" type="text" label="Company" />
         <Input className="w-full" id="address" type="text" label="Address" />
         <Input className="w-full" id="apartament" type="text" label="Apartament, suite, etc." />
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-1 lg:space-y-0">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-8 lg:space-y-0 pb-10">
           <div className="w-full">
             <Input className="w-full lg:w-[90%]" id="city" type="text" label="City" />
           </div>
@@ -60,7 +63,7 @@ const CheckoutForm = (props: Props) => {
             <Input className="w-full lg:w-[90%]" id="zip" type="text" label="Zip / Postal code" />
           </div>
         </div>
-        <h2 className="text-xl ">Billing information</h2>
+        <h2 className="text-xl">Billing information</h2>
         <div>
           <label htmlFor="sameAsShipping">
             <input type="checkbox" className="form-checkbox" id="sameAsShipping" /> Same as shipping address
