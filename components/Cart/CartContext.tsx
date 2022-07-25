@@ -1,11 +1,12 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-interface CartItem {
+export interface CartItem {
   readonly id: string;
   readonly price: number;
   readonly title: string;
   readonly count: number;
+  readonly image: string;
 }
 
 interface CartState {

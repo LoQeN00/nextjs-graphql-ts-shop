@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { useCartContext } from './useCartContext';
 
@@ -17,6 +18,9 @@ const CartSummary = (props: Props) => {
       <button onClick={clearCart} className="px-4 py-2 border-2 border-black rounded-2xl">
         Clear cart
       </button>
+      <Link href="/checkout">
+        <a className="px-4 py-2 border-2 border-black rounded-2xl ml-5 inline-block">Go to checkout</a>
+      </Link>
     </div>
   );
 };

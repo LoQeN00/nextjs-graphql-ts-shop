@@ -44,7 +44,9 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
         </article>
         <button
           className="px-4 py-2 border-2 border-black rounded-2xl"
-          onClick={() => addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id })}
+          onClick={() =>
+            addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
+          }
         >
           Dodaj do koszyka
         </button>
