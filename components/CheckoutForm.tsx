@@ -16,17 +16,17 @@ const schema = yup
   .object()
   .shape({
     email: yup.string().email().required(),
-    nameOnCard: yup.string().required(),
-    cardNumber: yup.number().required(),
-    expirationDate: yup.string().required(),
-    cvc: yup.number().required(),
-    company: yup.string().required(),
-    address: yup.string().required(),
-    apartament: yup.string().required(),
-    city: yup.string().required(),
-    state: yup.string().required(),
-    zip: yup.string().required(),
-    sameAsShipping: yup.boolean().required(),
+    nameOnCard: yup.string().required().typeError('Nieprawidłowe dane'),
+    cardNumber: yup.number().required().typeError('Nieprawidłowe dane'),
+    expirationDate: yup.string().required().typeError('Nieprawidłowe dane'),
+    cvc: yup.number().required().typeError('Nieprawidłowe dane'),
+    company: yup.string().required().typeError('Nieprawidłowe dane'),
+    address: yup.string().required().typeError('Nieprawidłowe dane'),
+    apartament: yup.string().required().typeError('Nieprawidłowe dane'),
+    city: yup.string().required().typeError('Nieprawidłowe dane'),
+    state: yup.string().required().typeError('Nieprawidłowe dane'),
+    zip: yup.string().required().typeError('Nieprawidłowe dane'),
+    sameAsShipping: yup.boolean().required().typeError('Nieprawidłowe dane'),
   })
   .required();
 
