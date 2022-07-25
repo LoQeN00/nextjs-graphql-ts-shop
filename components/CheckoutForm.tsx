@@ -15,7 +15,7 @@ yup.setLocale({
 const schema = yup
   .object()
   .shape({
-    email: yup.string().email().required(),
+    email: yup.string().email('Nieprawidłowy email').required(),
     nameOnCard: yup.string().required().typeError('Nieprawidłowe dane'),
     cardNumber: yup.number().required().typeError('Nieprawidłowe dane'),
     expirationDate: yup.string().required().typeError('Nieprawidłowe dane'),
