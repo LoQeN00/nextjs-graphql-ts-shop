@@ -3,6 +3,7 @@ import Input from './Input';
 import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Checkbox } from './Checkbox';
 
 type Props = {};
 
@@ -43,7 +44,7 @@ const CheckoutForm = (props: Props) => {
 
   return (
     <FormProvider {...methods}>
-      <form className="space-y-8 bg-white p-6" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form className="space-y-8 bg-white p-8" onSubmit={methods.handleSubmit(onSubmit)}>
         <h2 className="text-xl ">Contact Information</h2>
         <Input className="w-full" label="Email" id="email" type="email" />
         <h2 className="text-xl ">Payment details</h2>
@@ -69,17 +70,7 @@ const CheckoutForm = (props: Props) => {
           </div>
         </div>
         <h2 className="text-xl">Billing information</h2>
-        <div>
-          <label htmlFor="sameAsShipping">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              id="sameAsShipping"
-              {...methods.register('sameAsShipping')}
-            />{' '}
-            Same as shipping address
-          </label>
-        </div>
+        <Checkbox id="sameAsShipping" label="Same as shipping address" />
         <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
           Continue
         </button>
