@@ -5,19 +5,7 @@ import { CheckoutFormData } from './CheckoutForm';
 type Props = {
   className?: string;
   type: string;
-  id:
-    | 'address'
-    | 'email'
-    | 'nameOnCard'
-    | 'cardNumber'
-    | 'expirationDate'
-    | 'cvc'
-    | 'company'
-    | 'apartament'
-    | 'city'
-    | 'state'
-    | 'zip'
-    | 'sameAsShipping';
+  id: string;
   label: string;
   pattern?: string;
 };
@@ -27,7 +15,7 @@ const Input = ({ className, type, id, label }: Props) => {
     register,
     getFieldState,
     formState: { errors },
-  } = useFormContext<CheckoutFormData>();
+  } = useFormContext();
 
   return (
     <div className="space-y-1 relative">
@@ -37,7 +25,7 @@ const Input = ({ className, type, id, label }: Props) => {
         </label>
       </p>
       <input {...register(id)} type={type} id={id} className={`form-input rounded ${className}`} />
-      {errors[id] && <p className="text-red-500 font-bold absolute">{errors[id]?.message}</p>}
+      {errors[id] && <p className="text-red-500 font-bold absolute">{errors[id]?.message as any}</p>}
     </div>
   );
 };

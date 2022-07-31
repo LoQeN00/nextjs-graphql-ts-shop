@@ -11,11 +11,15 @@ import {
   GetProductByIdDocument,
   GetProductByIdQuery,
   GetProductByIdQueryVariables,
+  GetProductReviewsDocument,
+  GetProductReviewsQuery,
+  GetProductReviewsQueryVariables,
 } from '../../generated/graphql';
+import ProductReviews from '../../components/ProductReviews';
 
 type Props = {};
 
-const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductDetailsPage = ({ data, reviews }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
 
   if (!data) return <div>Nie znaleziono produktu</div>;
@@ -49,9 +53,10 @@ const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticPr
           thumbnailUrl: data.images[0]?.url,
           title: data.name,
           price: data.price,
-          id: data.id
+          id: data.id,
         }}
       />
+      <ProductReviews reviews={reviews} />
     </div>
   );
 };
@@ -74,12 +79,23 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }: GetStaticPropsContext<{ productId: string }>) => {
   if (!params?.productId) return { props: {}, notFound: true };
 
-  const { data, error } = await client.query<GetProductByIdQuery, GetProductByIdQueryVariables>({
+  const { data: productData, error: productError } = await client.query<
+    GetProductByIdQuery,
+    GetProductByIdQueryVariables
+  >({
     query: GetProductByIdDocument,
     variables: { id: params.productId },
   });
 
-  if (!data || !data.product) {
+  const { data: reviewsData, error: reviewsError } = await client.query<
+    GetProductReviewsQuery,
+    GetProductReviewsQueryVariables
+  >({
+    query: GetProductReviewsDocument,
+    variables: { id: params.productId },
+  });
+
+  if (!productData || !productData.product || productError || reviewsError) {
     return {
       props: {},
       notFound: true,
@@ -89,9 +105,10 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ product
   return {
     props: {
       data: {
-        ...data.product,
-        longDescription: await serialize(data.product?.description),
+        ...productData.product,
+        longDescription: await serialize(productData.product?.description),
       },
+      reviews: reviewsData.reviews,
     },
   };
 };

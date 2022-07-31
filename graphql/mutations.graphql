@@ -1,0 +1,12 @@
+mutation CreateProductReview($review: ReviewCreateInput!) {
+  review: createReview(data: $review) {
+    id
+    stage
+  }
+}
+
+mutation PublishProductReview($reviewId: ID!) {
+  review: publishReview(to: PUBLISHED, where: { id: $reviewId }) {
+    id
+  }
+}

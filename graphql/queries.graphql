@@ -28,3 +28,13 @@ query GetProductsIds {
     id
   }
 }
+
+query GetProductReviews($id: ID!) {
+  reviews(where: { product: { id: $id } }) {
+    id
+    headline
+    content
+    rating
+    name
+  }
+}

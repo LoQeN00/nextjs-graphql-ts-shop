@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { displayToast } from '../../lib/displayToast';
 
 export interface CartItem {
   readonly id: string;
@@ -37,19 +37,6 @@ const getCartItemsFromStorage = () => {
 const setCartItemsInStorage = (items: CartItem[] | []) => {
   if (!items) return;
   localStorage.setItem('SHOPPING_CART', JSON.stringify(items));
-};
-
-const displayToast = (message: string) => {
-  toast.success(message, {
-    position: 'bottom-right',
-    autoClose: 2500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'dark',
-  });
 };
 
 export const CartContextProvider = ({ children }: CartProviderProps) => {
