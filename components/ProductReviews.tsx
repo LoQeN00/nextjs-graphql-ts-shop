@@ -1,19 +1,26 @@
 import React from 'react';
-import { GetProductReviewsQuery } from '../generated/graphql';
+import { GetProductReviewsQuery, useGetProductReviewsQuery } from '../generated/graphql';
 import AddReviewForm from './AddReviewForm';
 import Stars from './Stars';
+import { useRouter } from 'next/router';
 
-type Props = {
-  reviews: GetProductReviewsQuery['reviews'];
-};
+type Props = {};
 
-const ProductReviews = ({ reviews }: Props) => {
-  console.log(reviews);
+const ProductReviews = ({}: Props) => {
+  const router = useRouter();
+
+  const { data, loading, error } = useGetProductReviewsQuery({ variables: { id: router.query.productId as string } });
+
   return (
     <div className="my-20 bg-white px-6 py-8 rounded-xl">
       <h1 className="text-4xl text-center font-bold">Opinie</h1>
       <div className="my-5  p-4  rounded-lg space-y-8">
-        {reviews.map((review) => {
+        {loading && (
+          <div>
+            <p>Loading...</p>
+          </div>
+        )}
+        {data?.reviews.map((review) => {
           return (
             <div
               key={review.id}

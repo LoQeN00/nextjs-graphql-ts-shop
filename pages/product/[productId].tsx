@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
 import { ProductDetails } from '../../components/ProductDetails';
 import { serialize } from 'next-mdx-remote/serialize';
@@ -11,24 +10,10 @@ import {
   GetProductByIdDocument,
   GetProductByIdQuery,
   GetProductByIdQueryVariables,
-  GetProductReviewsDocument,
-  GetProductReviewsQuery,
-  GetProductReviewsQueryVariables,
-  useGetProductReviewsQuery,
 } from '../../generated/graphql';
 import ProductReviews from '../../components/ProductReviews';
 
-type Props = {};
-
 const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const router = useRouter();
-
-  const {
-    data: reviews,
-    loading: reviewsLoading,
-    error: reviewsError,
-  } = useGetProductReviewsQuery({ variables: { id: router.query.productId as string } });
-
   if (!data) return <div>Nie znaleziono produktu</div>;
 
   return (
@@ -63,7 +48,7 @@ const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticPr
           id: data.id,
         }}
       />
-      {reviews && <ProductReviews reviews={reviews.reviews} />}
+      <ProductReviews />
     </div>
   );
 };
