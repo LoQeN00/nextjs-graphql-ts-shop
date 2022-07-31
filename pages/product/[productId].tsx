@@ -14,13 +14,20 @@ import {
   GetProductReviewsDocument,
   GetProductReviewsQuery,
   GetProductReviewsQueryVariables,
+  useGetProductReviewsQuery,
 } from '../../generated/graphql';
 import ProductReviews from '../../components/ProductReviews';
 
 type Props = {};
 
-const ProductDetailsPage = ({ data, reviews }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
+
+  const {
+    data: reviews,
+    loading: reviewsLoading,
+    error: reviewsError,
+  } = useGetProductReviewsQuery({ variables: { id: router.query.productId as string } });
 
   if (!data) return <div>Nie znaleziono produktu</div>;
 
@@ -56,7 +63,7 @@ const ProductDetailsPage = ({ data, reviews }: InferGetStaticPropsType<typeof ge
           id: data.id,
         }}
       />
-      <ProductReviews reviews={reviews} />
+      {reviews && <ProductReviews reviews={reviews.reviews} />}
     </div>
   );
 };
@@ -87,15 +94,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ product
     variables: { id: params.productId },
   });
 
-  const { data: reviewsData, error: reviewsError } = await client.query<
-    GetProductReviewsQuery,
-    GetProductReviewsQueryVariables
-  >({
-    query: GetProductReviewsDocument,
-    variables: { id: params.productId },
-  });
-
-  if (!productData || !productData.product || productError || reviewsError) {
+  if (!productData || !productData.product || productError) {
     return {
       props: {},
       notFound: true,
@@ -108,7 +107,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{ product
         ...productData.product,
         longDescription: await serialize(productData.product?.description),
       },
-      reviews: reviewsData.reviews,
     },
   };
 };
