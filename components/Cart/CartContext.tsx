@@ -14,6 +14,7 @@ interface CartState {
   readonly addItemToCart: (product: CartItem) => void;
   readonly removeItemFromCart: (id: CartItem['id']) => void;
   readonly clearCart: () => void;
+  readonly total: number;
 }
 
 export const CartContext = createContext<CartState | null>(null);
@@ -93,11 +94,16 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     setCartItems([]);
   };
 
+  const total = cartItems.reduce((actualPrice, item) => {
+    return actualPrice + item.price * item.count;
+  }, 0);
+
   const value = {
     items: cartItems,
     addItemToCart,
     removeItemFromCart,
     clearCart,
+    total,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -1,0 +1,7 @@
+mutation {
+  createOrder(
+    data: {orderItems: {connect: [{id: "dasdsasadas"}, {id: "dasd1234ad"}]}, email: "asd@o2.pl", total: 10, stripeCheckoutId: "asda123asd"}
+  ) {
+    id
+  }
+}

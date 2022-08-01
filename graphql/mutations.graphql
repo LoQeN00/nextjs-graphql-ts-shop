@@ -10,3 +10,15 @@ mutation PublishProductReview($reviewId: ID!) {
     id
   }
 }
+
+mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!) {
+  order: createOrder(data: { email: $email, total: $total, stripeCheckoutId: $stripeCheckoutId }) {
+    id
+  }
+}
+
+mutation UpdateOrder($orderId: ID!, $items: OrderItemUpdateManyInlineInput) {
+  updateOrder(where: { id: $orderId }, data: { orderItems: $items }) {
+    id
+  }
+}

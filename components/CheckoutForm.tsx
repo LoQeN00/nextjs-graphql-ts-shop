@@ -4,6 +4,9 @@ import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Checkbox } from './Checkbox';
+import { useCreateOrderMutation, useUpdateOrderMutation, OrderItemCreateInput } from '../generated/graphql';
+import { useCartContext } from '../components/Cart/useCartContext';
+import { displayToast } from '../lib/displayToast';
 
 type Props = {};
 
@@ -38,8 +41,43 @@ const CheckoutForm = (props: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: CheckoutFormData) => {
+  const { total, items } = useCartContext();
+
+  const [createOrder] = useCreateOrderMutation();
+  const [updateOrder] = useUpdateOrderMutation();
+
+  const onSubmit = async (data: CheckoutFormData) => {
     console.log(data);
+
+    const order = await createOrder({
+      variables: {
+        email: data.email,
+        stripeCheckoutId: 'odianmon123213',
+        total,
+      },
+    });
+
+    if (!order.data?.order) return;
+
+    const orderedItems = items.map((item) => {
+      return {
+        quantity: item.count,
+        total: item.count * item.price,
+        order: { connect: { id: order.data?.order?.id } },
+        product: { connect: { id: item.id } },
+      };
+    });
+
+    await updateOrder({
+      variables: {
+        orderId: order.data?.order?.id,
+        items: {
+          create: orderedItems,
+        },
+      },
+    });
+
+    displayToast('Zamówienie złożone pomyślnie');
   };
 
   return (
