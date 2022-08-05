@@ -1,6 +1,6 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { QueryClientProvider, QueryClient, Hydrate } from 'react-query';
+import { QueryClientProvider, QueryClient, Hydrate } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Layout } from '../components/Layout';
 import { DefaultSeo } from 'next-seo';
@@ -11,15 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '../graphql/apolloClient';
 
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient());
-
   return (
     <ApolloProvider client={client}>
-    <QueryClientProvider client={queryClient}>
-      <CartContextProvider>
-        <Hydrate state={pageProps.dehydratedState}>
+      <QueryClientProvider client={queryClient}>
+        <CartContextProvider>
           <Layout>
             <DefaultSeo {...SEO} />
             <Component {...pageProps} />
@@ -35,9 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               pauseOnHover
             />
           </Layout>
-        </Hydrate>
-      </CartContextProvider>
-    </QueryClientProvider>
+        </CartContextProvider>
+      </QueryClientProvider>
     </ApolloProvider>
   );
 }

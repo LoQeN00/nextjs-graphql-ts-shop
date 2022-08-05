@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetProductReviewsQuery, useGetProductReviewsQuery } from '../generated/graphql';
+import { useGetProductReviewsQuery } from '../generated/graphql';
 import AddReviewForm from './AddReviewForm';
 import Stars from './Stars';
 import { useRouter } from 'next/router';
@@ -9,7 +9,9 @@ type Props = {};
 const ProductReviews = ({}: Props) => {
   const router = useRouter();
 
-  const { data, loading, error } = useGetProductReviewsQuery({ variables: { id: router.query.productId as string } });
+  const { data, loading, error, refetch } = useGetProductReviewsQuery({
+    variables: { id: router.query.productId as string },
+  });
 
   return (
     <div className="my-20 bg-white px-6 py-8 rounded-xl">

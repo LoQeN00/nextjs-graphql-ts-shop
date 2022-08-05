@@ -3,7 +3,12 @@ import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Input from './Input';
-import { useCreateProductReviewMutation, usePublishProductReviewMutation } from '../generated/graphql';
+import {
+  GetProductReviewsDocument,
+  GetProductReviewsQuery,
+  useCreateProductReviewMutation,
+  usePublishProductReviewMutation,
+} from '../generated/graphql';
 import { useRouter } from 'next/router';
 import { displayToast } from '../lib/displayToast';
 
@@ -25,11 +30,35 @@ const AddReviewForm = (props: Props) => {
 
   const router = useRouter();
 
-  const [createProductReview, { loading }] = useCreateProductReviewMutation();
-  const [publishProductReview] = usePublishProductReviewMutation();
+  const [createProductReview] = useCreateProductReviewMutation();
+  const [publishProductReview] = usePublishProductReviewMutation({
+    // refetchQueries: [
+    //   {
+    //     query: GetProductReviewsDocument,
+    //     variables: { id: router.query.productId as string },
+    //   }
+    // ],
+    update(cache, result) {
+      const originalReviewsQuery = cache.readQuery<GetProductReviewsQuery>({
+        query: GetProductReviewsDocument,
+        variables: { id: router.query.productId as string },
+      });
+
+      if (!originalReviewsQuery || !result.data?.review) return;
+
+      const newReviews = [result.data.review, ...originalReviewsQuery.reviews];
+
+      cache.writeQuery({
+        query: GetProductReviewsDocument,
+        variables: { id: router.query.productId as string },
+        data: {
+          reviews: newReviews,
+        },
+      });
+    },
+  });
 
   const onSubmit = async (data: AddReviewFormData) => {
-    console.log(data);
     const reviewData = await createProductReview({
       variables: {
         review: {
@@ -49,7 +78,20 @@ const AddReviewForm = (props: Props) => {
 
     if (!reviewData) return;
 
-    await publishProductReview({ variables: { reviewId: reviewData.data?.review?.id! } });
+    await publishProductReview({
+      variables: { reviewId: reviewData.data?.review?.id! },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        review: {
+          __typename: 'Review',
+          id: reviewData.data?.review?.id!,
+          headline: data.content,
+          content: data.content,
+          name: data.name,
+          rating: data.rating,
+        },
+      },
+    });
 
     methods.reset();
     displayToast('Opinia została dodana i czeka na weryfikację');

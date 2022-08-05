@@ -10358,7 +10358,7 @@ export type PublishProductReviewMutationVariables = Exact<{
 }>;
 
 
-export type PublishProductReviewMutation = { __typename?: 'Mutation', review?: { __typename?: 'Review', id: string } | null };
+export type PublishProductReviewMutation = { __typename?: 'Mutation', review?: { __typename?: 'Review', id: string, headline: string, name: string, content: string, rating?: number | null } | null };
 
 export type CreateOrderMutationVariables = Exact<{
   email: Scalars['String'];
@@ -10440,6 +10440,10 @@ export const PublishProductReviewDocument = gql`
     mutation PublishProductReview($reviewId: ID!) {
   review: publishReview(to: PUBLISHED, where: {id: $reviewId}) {
     id
+    headline
+    name
+    content
+    rating
   }
 }
     `;

@@ -8,6 +8,10 @@ mutation CreateProductReview($review: ReviewCreateInput!) {
 mutation PublishProductReview($reviewId: ID!) {
   review: publishReview(to: PUBLISHED, where: { id: $reviewId }) {
     id
+    headline
+    name
+    content
+    rating
   }
 }
 
