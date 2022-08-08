@@ -8,7 +8,7 @@ type Props = {};
 const CartPage = (props: Props) => {
   return (
     <div>
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid sm:grid-cols-3 gap-8 grid-cols-1">
         <CartContent />
         <CartSummary />
       </div>
