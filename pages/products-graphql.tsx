@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
-import { ProductListItem } from '../components/ProductListItem';
+import { ProductListItem } from '../components/Product/ProductListItem';
 import { client } from '../graphql/apolloClient';
 import { gql } from '@apollo/client';
 import { GetProductsListDocument, GetProductsListQuery } from '../generated/graphql';

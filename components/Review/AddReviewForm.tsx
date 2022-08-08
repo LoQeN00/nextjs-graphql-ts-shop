@@ -2,15 +2,15 @@ import React from 'react';
 import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import Input from './Input';
+import Input from '../utils/Input';
 import {
   GetProductReviewsDocument,
   GetProductReviewsQuery,
   useCreateProductReviewMutation,
   usePublishProductReviewMutation,
-} from '../generated/graphql';
+} from '../../generated/graphql';
 import { useRouter } from 'next/router';
-import { displayToast } from '../lib/displayToast';
+import { displayToast } from '../../lib/displayToast';
 
 type Props = {};
 

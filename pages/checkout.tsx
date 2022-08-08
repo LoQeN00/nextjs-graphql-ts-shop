@@ -1,6 +1,6 @@
 import React from 'react';
-import CheckoutForm from '../components/CheckoutForm';
-import CheckoutSummary from '../components/CheckoutSummary';
+import CheckoutForm from '../components/Checkout/CheckoutForm';
+import CheckoutSummary from '../components/Checkout/CheckoutSummary';
 
 type Props = {};
 

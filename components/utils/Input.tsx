@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { CheckoutFormData } from './CheckoutForm';
+import { CheckoutFormData } from '../Checkout/CheckoutForm';
 
 type Props = {
   className?: string;

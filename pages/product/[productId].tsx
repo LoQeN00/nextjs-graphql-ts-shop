@@ -1,6 +1,6 @@
 import React from 'react';
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next';
-import { ProductDetails } from '../../components/ProductDetails';
+import { ProductDetails } from '../../components/Product/ProductDetails';
 import { serialize } from 'next-mdx-remote/serialize';
 import { NextSeo } from 'next-seo';
 import { client } from '../../graphql/apolloClient';
@@ -11,7 +11,7 @@ import {
   GetProductByIdQuery,
   GetProductByIdQueryVariables,
 } from '../../generated/graphql';
-import ProductReviews from '../../components/ProductReviews';
+import ProductReviews from '../../components/Review/ProductReviews';
 
 const ProductDetailsPage = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
   if (!data) return <div>Nie znaleziono produktu</div>;

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Rating } from './Rating';
 import Image from 'next/image';
-import { useCartContext } from './Cart/useCartContext';
+import { useCartContext } from '../Cart/useCartContext';
 import Link from 'next/link';
 
 interface ProductDetailsType {

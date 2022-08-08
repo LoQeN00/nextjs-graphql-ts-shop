@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { QueryClientProvider, QueryClient, Hydrate } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Layout } from '../components/Layout';
+import { Layout } from '../components/Layout/Layout';
 import { DefaultSeo } from 'next-seo';
 import SEO from '../next-seo.config';
 import { CartContextProvider } from '../components/Cart/CartContext';

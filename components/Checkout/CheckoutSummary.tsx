@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCartContext } from './Cart/useCartContext';
+import { useCartContext } from '../Cart/useCartContext';
 import CheckoutSummaryItem from './CheckoutSummaryItem';
 
 type Props = {};

@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { NextReactMarkdown } from '../components/NextReactMarkdown';
+import { NextReactMarkdown } from '../utils/NextReactMarkdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
-import { useCartContext } from './Cart/useCartContext';
+import { useCartContext } from '../Cart/useCartContext';
 
 interface ProductDetailsType {
   title: string;

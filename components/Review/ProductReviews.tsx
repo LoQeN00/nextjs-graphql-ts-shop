@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetProductReviewsQuery } from '../generated/graphql';
+import { useGetProductReviewsQuery } from '../../generated/graphql';
 import AddReviewForm from './AddReviewForm';
 import Stars from './Stars';
 import { useRouter } from 'next/router';

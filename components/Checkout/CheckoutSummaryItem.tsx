@@ -1,5 +1,5 @@
 import React from 'react';
-import { CartItem } from './Cart/CartContext';
+import { CartItem } from '../Cart/CartContext';
 import Image from 'next/image';
 
 type Props = {
