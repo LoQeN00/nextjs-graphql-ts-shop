@@ -27,6 +27,8 @@ const CartSummary = (props: Props) => {
 
     const response = await res.json();
 
+    console.log(response);
+
     await stripe.redirectToCheckout({ sessionId: response.session.id });
   };
 

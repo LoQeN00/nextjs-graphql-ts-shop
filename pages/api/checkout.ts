@@ -1,14 +1,7 @@
 import { GetCartByIdDocument, GetCartByIdQueryVariables, GetCartByIdQuery } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
-// import { client } from '../../graphql/apolloClient';
-
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-
-export const client = new ApolloClient({
-  uri: 'https://api-us-west-2.hygraph.com/v2/cl5me6ad9524n01uofjrw3hi2/master',
-  cache: new InMemoryCache(),
-});
+import { client } from '../../graphql/apolloClient';
 
 const handler: NextApiHandler = async (req, res) => {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -27,10 +20,10 @@ const handler: NextApiHandler = async (req, res) => {
     variables: {
       id: body.cartId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   });
 
-  console.log(data);
+  console.log(data.cart?.cartItems);
 
   if (!data.cart) return res.status(500).json({ message: 'Cart not found' });
 
@@ -43,13 +36,12 @@ const handler: NextApiHandler = async (req, res) => {
         unit_amount: Math.round(item.product?.price! * 100)!,
         product_data: {
           name: item.product?.name!,
+          images: [item.product!.images[0].url],
         },
       },
       quantity: item.quantity!,
     };
   });
-
-  console.log(formattedCartItems);
 
   const stripe = new Stripe(stripeKey, { apiVersion: '2022-08-01' });
 
@@ -63,6 +55,8 @@ const handler: NextApiHandler = async (req, res) => {
   });
 
   res.status(201).json({ session: stripeCheckoutSession });
+
+  //@todo stworz order w graphcms
 };
 
 export default handler;

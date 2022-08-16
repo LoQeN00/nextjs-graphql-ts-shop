@@ -53,7 +53,7 @@ const setCartItemsInStorage = (items: CartItem[] | []) => {
 export const CartContextProvider = ({ children }: CartProviderProps) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const { data } = useGetCartByIdQuery({ variables: { id: 'cl6w1lq0gkdxn0blmu6ymwfdp' } });
+  const { data, refetch } = useGetCartByIdQuery({ variables: { id: 'cl6w1lq0gkdxn0blmu6ymwfdp' } });
 
   const [insertItemToCart] = useAddItemToCartMutation();
   const [increaseItemQuantity] = useIncreaseItemQuantityMutation();
@@ -99,7 +99,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     ],
   });
 
-  console.log(cartItems);
+  console.log(data);
 
   useEffect(() => {
     if (!data) return;
