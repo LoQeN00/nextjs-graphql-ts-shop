@@ -38,3 +38,21 @@ query GetProductReviews($id: ID!) {
     name
   }
 }
+
+query GetCartById($id: ID!) {
+  cart(where: { id: $id }) {
+    id
+    cartItems {
+      id
+      quantity
+      product {
+        id
+        name
+        price
+        images {
+          url
+        }
+      }
+    }
+  }
+}

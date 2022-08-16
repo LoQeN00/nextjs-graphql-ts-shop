@@ -1,4 +1,14 @@
 import React, { createContext, useState, useEffect } from 'react';
+import {
+  GetCartByIdDocument,
+  useAddItemToCartMutation,
+  useClearCartMutation,
+  useDeleteCartItemMutation,
+  useGetCartByIdQuery,
+  useIncreaseItemQuantityMutation,
+  usePublishCartItemMutation,
+  usePublishCartMutation,
+} from '../../generated/graphql';
 import { displayToast } from '../../lib/displayToast';
 
 export interface CartItem {
@@ -43,55 +53,159 @@ const setCartItemsInStorage = (items: CartItem[] | []) => {
 export const CartContextProvider = ({ children }: CartProviderProps) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    setCartItems(getCartItemsFromStorage());
-  }, []);
+  const { data } = useGetCartByIdQuery({ variables: { id: 'cl6w1lq0gkdxn0blmu6ymwfdp' } });
+
+  const [insertItemToCart] = useAddItemToCartMutation();
+  const [increaseItemQuantity] = useIncreaseItemQuantityMutation();
+  const [removeItemsFromCart] = useClearCartMutation({
+    refetchQueries: [
+      {
+        query: GetCartByIdDocument,
+        variables: {
+          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        },
+      },
+    ],
+  });
+  const [deleteItemFromCart] = useDeleteCartItemMutation({
+    refetchQueries: [
+      {
+        query: GetCartByIdDocument,
+        variables: {
+          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        },
+      },
+    ],
+  });
+
+  const [publishCartItem] = usePublishCartItemMutation({
+    refetchQueries: [
+      {
+        query: GetCartByIdDocument,
+        variables: {
+          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        },
+      },
+    ],
+  });
+  const [publishCart] = usePublishCartMutation({
+    refetchQueries: [
+      {
+        query: GetCartByIdDocument,
+        variables: {
+          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        },
+      },
+    ],
+  });
+
+  console.log(cartItems);
 
   useEffect(() => {
-    setCartItemsInStorage(cartItems);
-  }, [cartItems]);
+    if (!data) return;
 
-  const addItemToCart = (product: CartItem) => {
-    setCartItems((prevState) => {
-      const existingItem = prevState.find((existingItem) => existingItem.id === product.id);
-      if (!existingItem) {
-        displayToast(`Successfully Added ${product.title} to your cart !`);
-        return [...prevState, product];
-      }
+    if (!data.cart) return;
 
-      const newItems = prevState.map((existingItem) => {
-        if (existingItem.id === product.id) {
-          displayToast(`Increased count of ${existingItem.title} to ${existingItem.count + 1}`);
-          return { ...existingItem, count: existingItem.count + 1 };
-        }
+    const cartItems = data.cart!.cartItems.map((item) => {
+      return {
+        id: item.product!.id,
+        price: item.product!.price,
+        title: item.product!.name,
+        count: item.quantity,
+        image: item.product!.images[0].url,
+      };
+    });
 
-        return existingItem;
+    setCartItems(cartItems);
+  }, [data]);
+
+  const addItemToCart = async (product: CartItem) => {
+    const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === product.id);
+    if (!existingItem) {
+      displayToast(`Successfully Added ${product.title} to your cart !`);
+      const cartItem = await insertItemToCart({
+        variables: { cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp', productId: product.id },
       });
 
-      return newItems;
+      await publishCartItem({
+        variables: { id: cartItem.data?.updateCart?.cartItems[cartItem.data?.updateCart?.cartItems.length - 1].id! },
+      });
+
+      await publishCart({
+        variables: {
+          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        },
+      });
+
+      return;
+    }
+
+    await increaseItemQuantity({
+      variables: {
+        cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        cartItemId: existingItem?.id!,
+        quantity: existingItem?.quantity! + 1,
+      },
+    });
+
+    await publishCart({
+      variables: {
+        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+      },
+    });
+
+    displayToast(`Increased quantity of ${product.title} to ${existingItem?.quantity! + 1} in your cart !`);
+
+    await publishCartItem({
+      variables: { id: existingItem?.id! },
     });
   };
 
-  const removeItemFromCart = (id: CartItem['id']) => {
-    setCartItems((prevState) => {
-      const existingItem = prevState.find((existingItem) => existingItem.id === id);
-      if (!existingItem) return prevState;
+  const removeItemFromCart = async (id: CartItem['id']) => {
+    const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === id);
+    if (!existingItem) return;
 
-      if (existingItem.count === 1) {
-        return prevState.filter((product) => product.id !== id);
-      }
-
-      const newItems = prevState.map((product) => {
-        return product.id === id ? { ...product, count: product.count - 1 } : product;
+    if (existingItem.quantity === 1) {
+      await deleteItemFromCart({
+        variables: {
+          id: existingItem?.id!,
+        },
       });
 
-      return newItems;
+      return;
+    }
+
+    await increaseItemQuantity({
+      variables: {
+        cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        cartItemId: existingItem?.id!,
+        quantity: existingItem?.quantity! - 1,
+      },
+    });
+
+    await publishCartItem({
+      variables: { id: existingItem?.id! },
+    });
+
+    await publishCart({
+      variables: {
+        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+      },
     });
   };
 
-  const clearCart = () => {
-    setCartItemsInStorage([]);
-    setCartItems([]);
+  const clearCart = async () => {
+    await removeItemsFromCart({
+      variables: {
+        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+      },
+    });
+
+    await publishCart({
+      variables: {
+        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+      },
+    });
   };
 
   const total = cartItems.reduce((actualPrice, item) => {

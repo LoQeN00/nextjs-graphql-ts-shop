@@ -26,3 +26,48 @@ mutation UpdateOrder($orderId: ID!, $items: OrderItemUpdateManyInlineInput) {
     id
   }
 }
+
+mutation AddItemToCart($cartId: ID!, $productId: ID!) {
+  updateCart(
+    where: { id: $cartId }
+    data: { cartItems: { create: { quantity: 1, product: { connect: { id: $productId } } } } }
+  ) {
+    id
+    cartItems {
+      id
+    }
+  }
+}
+
+mutation IncreaseItemQuantity($cartId: ID!, $cartItemId: ID!, $quantity: Int!) {
+  updateCart(
+    where: { id: $cartId }
+    data: { cartItems: { update: { where: { id: $cartItemId }, data: { quantity: $quantity } } } }
+  ) {
+    id
+  }
+}
+
+mutation DeleteCartItem($id: ID!) {
+  deleteCartItem(where: { id: $id }) {
+    id
+  }
+}
+
+mutation ClearCart($id: ID!) {
+  updateCart(where: { id: $id }, data: { cartItems: { set: [] } }) {
+    id
+  }
+}
+
+mutation PublishCart($id: ID!) {
+  publishCart(to: PUBLISHED, where: { id: $id }) {
+    id
+  }
+}
+
+mutation PublishCartItem($id: ID!) {
+  publishCartItem(to: PUBLISHED, where: { id: $id }) {
+    id
+  }
+}
