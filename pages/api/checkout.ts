@@ -23,8 +23,6 @@ const handler: NextApiHandler = async (req, res) => {
     fetchPolicy: 'no-cache',
   });
 
-  console.log(data.cart?.cartItems);
-
   if (!data.cart) return res.status(500).json({ message: 'Cart not found' });
 
   if (!data.cart.cartItems.length) return res.status(500).json({ message: 'No items found' });
@@ -49,8 +47,12 @@ const handler: NextApiHandler = async (req, res) => {
     mode: 'payment',
     locale: 'pl',
     payment_method_types: ['card', 'p24'],
-    success_url: 'http://localhost:3000/checkout/success?session_id={CHECKOUT_SESSION_ID}',
-    cancel_url: 'http://localhost:3000/checkout/cancel',
+    success_url: `${
+      process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL! : process.env.DEVELOPMENT_URL
+    }/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${
+      process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL! : process.env.DEVELOPMENT_URL
+    }/checkout/cancel`,
     line_items: formattedCartItems,
   });
 
