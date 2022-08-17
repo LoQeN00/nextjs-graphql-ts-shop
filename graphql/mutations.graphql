@@ -77,3 +77,9 @@ mutation PublishCartItem($id: ID!) {
     id
   }
 }
+
+mutation PublishOrder($id: ID!) {
+  publishOrder(where: { id: $id }) {
+    id
+  }
+}

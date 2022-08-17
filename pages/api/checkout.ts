@@ -8,6 +8,9 @@ import {
   UpdateOrderDocument,
   UpdateOrderMutation,
   UpdateOrderMutationVariables,
+  PublishOrderDocument,
+  PublishOrderMutation,
+  PublishOrderMutationVariables,
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
@@ -94,6 +97,13 @@ const handler: NextApiHandler = async (req, res) => {
       items: {
         create: formattedOrderedItems,
       },
+    },
+  });
+
+  await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+    mutation: PublishOrderDocument,
+    variables: {
+      id: order.data?.order?.id!,
     },
   });
 
