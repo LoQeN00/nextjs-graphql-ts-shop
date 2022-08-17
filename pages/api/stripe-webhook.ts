@@ -2,6 +2,9 @@ import {
   UpdateOrderByStripeCheckoutIdDocument,
   UpdateOrderByStripeCheckoutIdMutation,
   UpdateOrderByStripeCheckoutIdMutationVariables,
+  PublishOrderDocument,
+  PublishOrderMutation,
+  PublishOrderMutationVariables,
 } from './../../generated/graphql';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from 'next';
@@ -11,11 +14,21 @@ const handler: NextApiHandler = async (req, res) => {
   const event = req.body;
 
   const changeOrderStatus = async (id: string) => {
-    await client.mutate<UpdateOrderByStripeCheckoutIdMutation, UpdateOrderByStripeCheckoutIdMutationVariables>({
+    const order = await client.mutate<
+      UpdateOrderByStripeCheckoutIdMutation,
+      UpdateOrderByStripeCheckoutIdMutationVariables
+    >({
       mutation: UpdateOrderByStripeCheckoutIdDocument,
       variables: {
         stripeCheckoutId: id,
         state: 'PAID',
+      },
+    });
+
+    await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+      mutation: PublishOrderDocument,
+      variables: {
+        id: order.data?.updateOrder?.id!,
       },
     });
   };

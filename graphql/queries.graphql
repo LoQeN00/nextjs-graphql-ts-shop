@@ -56,3 +56,17 @@ query GetCartById($id: ID!) {
     }
   }
 }
+
+query FindOrderByStripeCheckoutId($id: String!) {
+  order(where: { stripeCheckoutId: $id }) {
+    total
+    email
+    state
+    orderItems {
+      quantity
+      product {
+        name
+      }
+    }
+  }
+}

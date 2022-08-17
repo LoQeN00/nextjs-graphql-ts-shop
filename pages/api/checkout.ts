@@ -11,6 +11,9 @@ import {
   PublishOrderDocument,
   PublishOrderMutation,
   PublishOrderMutationVariables,
+  PublishMultipleOrderItemsDocument,
+  PublishMultipleOrderItemsMutation,
+  PublishMultipleOrderItemsMutationVariables,
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
@@ -90,13 +93,20 @@ const handler: NextApiHandler = async (req, res) => {
     };
   });
 
-  await client.mutate<UpdateOrderMutation, UpdateOrderMutationVariables>({
+  const updatedOrder = await client.mutate<UpdateOrderMutation, UpdateOrderMutationVariables>({
     mutation: UpdateOrderDocument,
     variables: {
       orderId: order.data?.order?.id!,
       items: {
         create: formattedOrderedItems,
       },
+    },
+  });
+
+  await client.mutate<PublishMultipleOrderItemsMutation, PublishMultipleOrderItemsMutationVariables>({
+    mutation: PublishMultipleOrderItemsDocument,
+    variables: {
+      id: order.data?.order?.id!,
     },
   });
 

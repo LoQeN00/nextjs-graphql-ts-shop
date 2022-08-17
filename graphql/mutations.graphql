@@ -24,6 +24,9 @@ mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!, 
 mutation UpdateOrder($orderId: ID!, $items: OrderItemUpdateManyInlineInput) {
   updateOrder(where: { id: $orderId }, data: { orderItems: $items }) {
     id
+    orderItems {
+      id
+    }
   }
 }
 
@@ -81,5 +84,17 @@ mutation PublishCartItem($id: ID!) {
 mutation PublishOrder($id: ID!) {
   publishOrder(where: { id: $id }) {
     id
+  }
+}
+
+mutation PublishMultipleOrderItems($id: ID!) {
+  publishManyOrderItemsConnection(to: PUBLISHED, where: { order: { id: $id } }) {
+    edges {
+      node {
+        product {
+          name
+        }
+      }
+    }
   }
 }
