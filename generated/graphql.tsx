@@ -5487,6 +5487,7 @@ export type Order = Node & {
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
+  state?: Maybe<Scalars['String']>;
   stripeCheckoutId: Scalars['String'];
   total: Scalars['Int'];
   /** The time the document was updated */
@@ -5568,6 +5569,7 @@ export type OrderCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   email: Scalars['String'];
   orderItems?: InputMaybe<OrderItemCreateManyInlineInput>;
+  state?: InputMaybe<Scalars['String']>;
   stripeCheckoutId: Scalars['String'];
   total: Scalars['Int'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -6130,6 +6132,25 @@ export type OrderManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  state?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  state_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  state_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  state_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  state_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  state_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  state_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  state_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  state_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  state_starts_with?: InputMaybe<Scalars['String']>;
   stripeCheckoutId?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   stripeCheckoutId_contains?: InputMaybe<Scalars['String']>;
@@ -6191,6 +6212,8 @@ export enum OrderOrderByInput {
   IdDesc = 'id_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  StateAsc = 'state_ASC',
+  StateDesc = 'state_DESC',
   StripeCheckoutIdAsc = 'stripeCheckoutId_ASC',
   StripeCheckoutIdDesc = 'stripeCheckoutId_DESC',
   TotalAsc = 'total_ASC',
@@ -6202,6 +6225,7 @@ export enum OrderOrderByInput {
 export type OrderUpdateInput = {
   email?: InputMaybe<Scalars['String']>;
   orderItems?: InputMaybe<OrderItemUpdateManyInlineInput>;
+  state?: InputMaybe<Scalars['String']>;
   stripeCheckoutId?: InputMaybe<Scalars['String']>;
   total?: InputMaybe<Scalars['Int']>;
 };
@@ -6225,7 +6249,7 @@ export type OrderUpdateManyInlineInput = {
 
 export type OrderUpdateManyInput = {
   email?: InputMaybe<Scalars['String']>;
-  stripeCheckoutId?: InputMaybe<Scalars['String']>;
+  state?: InputMaybe<Scalars['String']>;
   total?: InputMaybe<Scalars['Int']>;
 };
 
@@ -6358,6 +6382,25 @@ export type OrderWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  state?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  state_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  state_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  state_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  state_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  state_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  state_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  state_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  state_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  state_starts_with?: InputMaybe<Scalars['String']>;
   stripeCheckoutId?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   stripeCheckoutId_contains?: InputMaybe<Scalars['String']>;
@@ -6413,6 +6456,7 @@ export type OrderWhereInput = {
 /** References Order record uniquely */
 export type OrderWhereUniqueInput = {
   id?: InputMaybe<Scalars['ID']>;
+  stripeCheckoutId?: InputMaybe<Scalars['String']>;
 };
 
 /** Information about pagination in a connection. */
@@ -11565,6 +11609,7 @@ export type CreateOrderMutationVariables = Exact<{
   email: Scalars['String'];
   total: Scalars['Int'];
   stripeCheckoutId: Scalars['String'];
+  state: Scalars['String'];
 }>;
 
 
@@ -11577,6 +11622,14 @@ export type UpdateOrderMutationVariables = Exact<{
 
 
 export type UpdateOrderMutation = { __typename?: 'Mutation', updateOrder?: { __typename?: 'Order', id: string } | null };
+
+export type UpdateOrderByStripeCheckoutIdMutationVariables = Exact<{
+  stripeCheckoutId: Scalars['String'];
+  state: Scalars['String'];
+}>;
+
+
+export type UpdateOrderByStripeCheckoutIdMutation = { __typename?: 'Mutation', updateOrder?: { __typename?: 'Order', id: string } | null };
 
 export type AddItemToCartMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -11727,9 +11780,9 @@ export type PublishProductReviewMutationHookResult = ReturnType<typeof usePublis
 export type PublishProductReviewMutationResult = Apollo.MutationResult<PublishProductReviewMutation>;
 export type PublishProductReviewMutationOptions = Apollo.BaseMutationOptions<PublishProductReviewMutation, PublishProductReviewMutationVariables>;
 export const CreateOrderDocument = gql`
-    mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!) {
+    mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!, $state: String!) {
   order: createOrder(
-    data: {email: $email, total: $total, stripeCheckoutId: $stripeCheckoutId}
+    data: {email: $email, total: $total, stripeCheckoutId: $stripeCheckoutId, state: $state}
   ) {
     id
   }
@@ -11753,6 +11806,7 @@ export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation,
  *      email: // value for 'email'
  *      total: // value for 'total'
  *      stripeCheckoutId: // value for 'stripeCheckoutId'
+ *      state: // value for 'state'
  *   },
  * });
  */
@@ -11797,6 +11851,40 @@ export function useUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateOrderMutationHookResult = ReturnType<typeof useUpdateOrderMutation>;
 export type UpdateOrderMutationResult = Apollo.MutationResult<UpdateOrderMutation>;
 export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<UpdateOrderMutation, UpdateOrderMutationVariables>;
+export const UpdateOrderByStripeCheckoutIdDocument = gql`
+    mutation UpdateOrderByStripeCheckoutId($stripeCheckoutId: String!, $state: String!) {
+  updateOrder(where: {stripeCheckoutId: $stripeCheckoutId}, data: {state: $state}) {
+    id
+  }
+}
+    `;
+export type UpdateOrderByStripeCheckoutIdMutationFn = Apollo.MutationFunction<UpdateOrderByStripeCheckoutIdMutation, UpdateOrderByStripeCheckoutIdMutationVariables>;
+
+/**
+ * __useUpdateOrderByStripeCheckoutIdMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrderByStripeCheckoutIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrderByStripeCheckoutIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrderByStripeCheckoutIdMutation, { data, loading, error }] = useUpdateOrderByStripeCheckoutIdMutation({
+ *   variables: {
+ *      stripeCheckoutId: // value for 'stripeCheckoutId'
+ *      state: // value for 'state'
+ *   },
+ * });
+ */
+export function useUpdateOrderByStripeCheckoutIdMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderByStripeCheckoutIdMutation, UpdateOrderByStripeCheckoutIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOrderByStripeCheckoutIdMutation, UpdateOrderByStripeCheckoutIdMutationVariables>(UpdateOrderByStripeCheckoutIdDocument, options);
+      }
+export type UpdateOrderByStripeCheckoutIdMutationHookResult = ReturnType<typeof useUpdateOrderByStripeCheckoutIdMutation>;
+export type UpdateOrderByStripeCheckoutIdMutationResult = Apollo.MutationResult<UpdateOrderByStripeCheckoutIdMutation>;
+export type UpdateOrderByStripeCheckoutIdMutationOptions = Apollo.BaseMutationOptions<UpdateOrderByStripeCheckoutIdMutation, UpdateOrderByStripeCheckoutIdMutationVariables>;
 export const AddItemToCartDocument = gql`
     mutation AddItemToCart($cartId: ID!, $productId: ID!) {
   updateCart(

@@ -15,14 +15,20 @@ mutation PublishProductReview($reviewId: ID!) {
   }
 }
 
-mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!) {
-  order: createOrder(data: { email: $email, total: $total, stripeCheckoutId: $stripeCheckoutId }) {
+mutation CreateOrder($email: String!, $total: Int!, $stripeCheckoutId: String!, $state: String!) {
+  order: createOrder(data: { email: $email, total: $total, stripeCheckoutId: $stripeCheckoutId, state: $state }) {
     id
   }
 }
 
 mutation UpdateOrder($orderId: ID!, $items: OrderItemUpdateManyInlineInput) {
   updateOrder(where: { id: $orderId }, data: { orderItems: $items }) {
+    id
+  }
+}
+
+mutation UpdateOrderByStripeCheckoutId($stripeCheckoutId: String!, $state: String!) {
+  updateOrder(where: { stripeCheckoutId: $stripeCheckoutId }, data: { state: $state }) {
     id
   }
 }

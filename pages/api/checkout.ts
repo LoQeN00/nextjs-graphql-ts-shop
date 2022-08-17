@@ -1,4 +1,14 @@
-import { GetCartByIdDocument, GetCartByIdQueryVariables, GetCartByIdQuery } from './../../generated/graphql';
+import {
+  GetCartByIdDocument,
+  GetCartByIdQueryVariables,
+  GetCartByIdQuery,
+  CreateOrderDocument,
+  CreateOrderMutation,
+  CreateOrderMutationVariables,
+  UpdateOrderDocument,
+  UpdateOrderMutation,
+  UpdateOrderMutationVariables,
+} from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
 import { client } from '../../graphql/apolloClient';
@@ -12,8 +22,6 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const body = req.body as { cartId: string };
-
-  console.log(body);
 
   const { data, error, loading } = await client.query<GetCartByIdQuery, GetCartByIdQueryVariables>({
     query: GetCartByIdDocument,
@@ -54,6 +62,39 @@ const handler: NextApiHandler = async (req, res) => {
       process.env.NODE_ENV === 'production' ? process.env.PRODUCTION_URL! : process.env.DEVELOPMENT_URL
     }/checkout/cancel`,
     line_items: formattedCartItems,
+  });
+
+  const total = data.cart.cartItems.reduce((actualPrice, item) => {
+    return actualPrice + item.product?.price! * item.quantity;
+  }, 0);
+
+  const order = await client.mutate<CreateOrderMutation, CreateOrderMutationVariables>({
+    mutation: CreateOrderDocument,
+    variables: {
+      email: 'test@o2.pl',
+      stripeCheckoutId: stripeCheckoutSession.id,
+      total,
+      state: 'PENDING',
+    },
+  });
+
+  const formattedOrderedItems = data.cart.cartItems.map((item) => {
+    return {
+      quantity: item.quantity,
+      total: item.quantity * item.product?.price!,
+      order: { connect: { id: order.data?.order?.id } },
+      product: { connect: { id: item.product?.id } },
+    };
+  });
+
+  await client.mutate<UpdateOrderMutation, UpdateOrderMutationVariables>({
+    mutation: UpdateOrderDocument,
+    variables: {
+      orderId: order.data?.order?.id!,
+      items: {
+        create: formattedOrderedItems,
+      },
+    },
   });
 
   res.status(201).json({ session: stripeCheckoutSession });

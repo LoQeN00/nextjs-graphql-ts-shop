@@ -49,33 +49,33 @@ const CheckoutForm = (props: Props) => {
   const onSubmit = async (data: CheckoutFormData) => {
     console.log(data);
 
-    const order = await createOrder({
-      variables: {
-        email: data.email,
-        stripeCheckoutId: 'odianmon123213',
-        total,
-      },
-    });
+    // const order = await createOrder({
+    //   variables: {
+    //     email: data.email,
+    //     stripeCheckoutId: 'odianmon123213',
+    //     total,
+    //   },
+    // });
 
-    if (!order.data?.order) return;
+    // if (!order.data?.order) return;
 
-    const orderedItems = items.map((item) => {
-      return {
-        quantity: item.count,
-        total: item.count * item.price,
-        order: { connect: { id: order.data?.order?.id } },
-        product: { connect: { id: item.id } },
-      };
-    });
+    // const orderedItems = items.map((item) => {
+    //   return {
+    //     quantity: item.count,
+    //     total: item.count * item.price,
+    //     order: { connect: { id: order.data?.order?.id } },
+    //     product: { connect: { id: item.id } },
+    //   };
+    // });
 
-    await updateOrder({
-      variables: {
-        orderId: order.data?.order?.id,
-        items: {
-          create: orderedItems,
-        },
-      },
-    });
+    // await updateOrder({
+    //   variables: {
+    //     orderId: order.data?.order?.id,
+    //     items: {
+    //       create: orderedItems,
+    //     },
+    //   },
+    // });
 
     displayToast('Zamówienie złożone pomyślnie');
   };

@@ -1,8 +1,6 @@
-import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartContext } from './useCartContext';
-import Stripe from 'stripe';
 
 type Props = {};
 
@@ -27,8 +25,6 @@ const CartSummary = (props: Props) => {
 
     const response = await res.json();
 
-    console.log(response);
-
     await stripe.redirectToCheckout({ sessionId: response.session.id });
   };
 
@@ -44,11 +40,6 @@ const CartSummary = (props: Props) => {
           Clear cart
         </button>
         {items.length > 0 && (
-          // <Link href="/checkout">
-          //   <a className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg inline-block max-w-[200px] text-center">
-          //     Go to checkout
-          //   </a>
-          // </Link>
           <button
             className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center"
             onClick={pay}
