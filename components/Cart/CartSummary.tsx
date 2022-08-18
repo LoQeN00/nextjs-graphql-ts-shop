@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartContext } from './useCartContext';
+import { ClipLoader } from 'react-spinners';
 
 type Props = {};
 
@@ -9,7 +10,11 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 const CartSummary = (props: Props) => {
   const { items, clearCart, total } = useCartContext();
 
+  const [loading, setIsLoading] = useState<boolean>(false);
+
   const pay = async () => {
+    setIsLoading(true);
+
     const stripe = await stripePromise;
 
     if (!stripe) {
@@ -26,6 +31,8 @@ const CartSummary = (props: Props) => {
     const response = await res.json();
 
     await stripe.redirectToCheckout({ sessionId: response.session.id });
+
+    setIsLoading(false);
   };
 
   return (
@@ -41,10 +48,17 @@ const CartSummary = (props: Props) => {
         </button>
         {items.length > 0 && (
           <button
-            className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center"
+            className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center flex justify-between items-center space-x-4"
             onClick={pay}
           >
-            Go to checkout
+            {loading ? (
+              <>
+                {' '}
+                Loading <ClipLoader color="#ffffff" />{' '}
+              </>
+            ) : (
+              'Go to Checkout'
+            )}
           </button>
         )}
       </div>

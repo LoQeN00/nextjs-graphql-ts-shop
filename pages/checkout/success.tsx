@@ -19,8 +19,6 @@ const SuccessPage = (props: Props) => {
     fetchPolicy: 'no-cache',
   });
 
-  console.log(data);
-
   return (
     <div>
       <h1>SuccessPage</h1>
