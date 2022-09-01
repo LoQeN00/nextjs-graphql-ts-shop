@@ -21,6 +21,7 @@ export const Header = (props: Props) => {
           <Navlink href="/about" text="About" />
           <Navlink href="/products-graphql" text="Products" />
         </div>
+        <p>{session?.user.email}</p>
         <div className="space-x-4">
           <Cart />
           {status === 'authenticated' ? (

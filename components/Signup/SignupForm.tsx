@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Input from '../utils/Input';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 
 type Props = {};
 
@@ -41,7 +41,7 @@ export const SignupForm = (props: Props) => {
   };
 
   if (status === 'authenticated') {
-    router.push('/');
+    signIn('credentials');
     return null;
   }
 
@@ -54,6 +54,13 @@ export const SignupForm = (props: Props) => {
           <Input className="w-full" id="password" label="Password" type="password" />
           <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
             Zarejestruj się
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 rounded-full bg-blue-700 text-white"
+            onClick={() => signIn('credentials')}
+          >
+            Masz konto? Zaloguj się
           </button>
         </form>
       </div>
