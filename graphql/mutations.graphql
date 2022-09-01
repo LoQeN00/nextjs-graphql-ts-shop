@@ -98,3 +98,15 @@ mutation PublishMultipleOrderItems($id: ID!) {
     }
   }
 }
+
+mutation CreateAccount($email: String!, $password: String!) {
+  createAccount(data: { email: $email, password: $password }) {
+    id
+  }
+}
+
+mutation PublishAccount($id: ID!) {
+  publishAccount(to: PUBLISHED, where: { id: $id }) {
+    id
+  }
+}

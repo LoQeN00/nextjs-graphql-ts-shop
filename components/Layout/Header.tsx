@@ -1,13 +1,13 @@
-import React from 'react';
-import Link from 'next/link';
 import { Navlink } from '../utils/Navlink';
 import { Cart } from '../Cart/Cart';
 import { useDetectScrollDirection } from '../../hooks/useDetectScrollDirection';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 type Props = {};
 
 export const Header = (props: Props) => {
   const { scrollDirection } = useDetectScrollDirection();
+  const { data: session, status } = useSession();
 
   return (
     <header
@@ -21,8 +21,13 @@ export const Header = (props: Props) => {
           <Navlink href="/about" text="About" />
           <Navlink href="/products-graphql" text="Products" />
         </div>
-        <div>
+        <div className="space-x-4">
           <Cart />
+          {status === 'authenticated' ? (
+            <button onClick={() => signOut()}>Wyloguj</button>
+          ) : (
+            <button onClick={() => signIn()}>Zaloguj</button>
+          )}
         </div>
       </nav>
     </header>

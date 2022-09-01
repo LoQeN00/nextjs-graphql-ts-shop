@@ -10,32 +10,35 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '../graphql/apolloClient';
+import { SessionProvider } from 'next-auth/react';
 
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-    <ApolloProvider client={client}>
-      <QueryClientProvider client={queryClient}>
-        <CartContextProvider>
-          <Layout>
-            <DefaultSeo {...SEO} />
-            <Component {...pageProps} />
-            <ToastContainer
-              position="bottom-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-            />
-          </Layout>
-        </CartContextProvider>
-      </QueryClientProvider>
-    </ApolloProvider>
+    <SessionProvider session={session}>
+      <ApolloProvider client={client}>
+        <QueryClientProvider client={queryClient}>
+          <CartContextProvider>
+            <Layout>
+              <DefaultSeo {...SEO} />
+              <Component {...pageProps} />
+              <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+            </Layout>
+          </CartContextProvider>
+        </QueryClientProvider>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }
 

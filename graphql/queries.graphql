@@ -70,3 +70,11 @@ query FindOrderByStripeCheckoutId($id: String!) {
     }
   }
 }
+
+query FindAccountByEmail($email: String!) {
+  account(where: { email: $email }) {
+    id
+    email
+    password
+  }
+}

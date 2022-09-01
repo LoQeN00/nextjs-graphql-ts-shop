@@ -7,11 +7,26 @@ export const client = new ApolloClient({
     watchQuery: {
       nextFetchPolicy(currentFetchPolicy) {
         if (currentFetchPolicy === 'network-only' || currentFetchPolicy === 'cache-and-network') {
-          // Demote the network policies (except "no-cache") to "cache-first"
-          // after the first request.
           return 'cache-first';
         }
-        // Leave all other fetch policies unchanged.
+        return currentFetchPolicy;
+      },
+    },
+  },
+});
+
+export const authorizedClient = new ApolloClient({
+  uri: 'https://api-us-west-2.hygraph.com/v2/cl5me6ad9524n01uofjrw3hi2/master',
+  cache: new InMemoryCache(),
+  headers: {
+    Authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,
+  },
+  defaultOptions: {
+    watchQuery: {
+      nextFetchPolicy(currentFetchPolicy) {
+        if (currentFetchPolicy === 'network-only' || currentFetchPolicy === 'cache-and-network') {
+          return 'cache-first';
+        }
         return currentFetchPolicy;
       },
     },
