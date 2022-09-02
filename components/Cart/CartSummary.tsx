@@ -35,7 +35,11 @@ const CartSummary = (props: Props) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
 
-      body: JSON.stringify({ cartId: cartId.data?.account?.cart?.id, userId: session?.user.id }),
+      body: JSON.stringify({
+        cartId: cartId.data?.account?.cart?.id,
+        userId: session?.user.id,
+        email: session?.user.email,
+      }),
     });
 
     const response = await res.json();

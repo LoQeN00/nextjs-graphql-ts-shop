@@ -33,7 +33,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const body = req.body as { cartId: string; userId: string };
+  const body = req.body as { cartId: string; userId: string; email: string };
 
   const { data, error, loading } = await client.query<GetCartByIdQuery, GetCartByIdQueryVariables>({
     query: GetCartByIdDocument,
@@ -83,7 +83,7 @@ const handler: NextApiHandler = async (req, res) => {
   const order = await client.mutate<CreateOrderMutation, CreateOrderMutationVariables>({
     mutation: CreateOrderDocument,
     variables: {
-      email: 'test@o2.pl',
+      email: body.email,
       stripeCheckoutId: stripeCheckoutSession.id,
       total,
       state: 'PENDING',
