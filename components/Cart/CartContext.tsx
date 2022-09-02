@@ -68,7 +68,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
       {
         query: GetCartByIdDocument,
         variables: {
-          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+          id: cartId.data?.account?.cart?.id,
         },
       },
     ],
@@ -78,7 +78,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
       {
         query: GetCartByIdDocument,
         variables: {
-          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+          id: cartId.data?.account?.cart?.id,
         },
       },
     ],
@@ -89,7 +89,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
       {
         query: GetCartByIdDocument,
         variables: {
-          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+          id: cartId.data?.account?.cart?.id,
         },
       },
     ],
@@ -99,7 +99,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
       {
         query: GetCartByIdDocument,
         variables: {
-          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+          id: cartId.data?.account?.cart?.id,
         },
       },
     ],
