@@ -78,3 +78,11 @@ query FindAccountByEmail($email: String!) {
     password
   }
 }
+
+query FindUserCartId($id: ID!) {
+  account(where: { id: $id }) {
+    cart {
+      id
+    }
+  }
+}

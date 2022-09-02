@@ -4,12 +4,14 @@ import {
   useAddItemToCartMutation,
   useClearCartMutation,
   useDeleteCartItemMutation,
+  useFindUserCartIdQuery,
   useGetCartByIdQuery,
   useIncreaseItemQuantityMutation,
   usePublishCartItemMutation,
   usePublishCartMutation,
 } from '../../generated/graphql';
 import { displayToast } from '../../lib/displayToast';
+import { useSession } from 'next-auth/react';
 
 export interface CartItem {
   readonly id: string;
@@ -53,7 +55,11 @@ const setCartItemsInStorage = (items: CartItem[] | []) => {
 export const CartContextProvider = ({ children }: CartProviderProps) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const { data } = useGetCartByIdQuery({ variables: { id: 'cl6w1lq0gkdxn0blmu6ymwfdp' } });
+  const { data: session } = useSession();
+
+  const cartId = useFindUserCartIdQuery({ variables: { id: session?.user.id! } });
+
+  const { data } = useGetCartByIdQuery({ variables: { id: cartId.data?.account?.cart?.id! } });
 
   const [insertItemToCart] = useAddItemToCartMutation();
   const [increaseItemQuantity] = useIncreaseItemQuantityMutation();
@@ -117,12 +123,14 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     setCartItems(cartItems);
   }, [data]);
 
+  // if (!data) return null;
+
   const addItemToCart = async (product: CartItem) => {
     const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === product.id);
     if (!existingItem) {
       displayToast(`Successfully Added ${product.title} to your cart !`);
       const cartItem = await insertItemToCart({
-        variables: { cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp', productId: product.id },
+        variables: { cartId: cartId.data?.account?.cart?.id!, productId: product.id },
       });
 
       await publishCartItem({
@@ -131,7 +139,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
       await publishCart({
         variables: {
-          id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+          id: cartId.data?.account?.cart?.id!,
         },
       });
 
@@ -140,7 +148,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
     await increaseItemQuantity({
       variables: {
-        cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        cartId: cartId.data?.account?.cart?.id!,
         cartItemId: existingItem?.id!,
         quantity: existingItem?.quantity! + 1,
       },
@@ -148,7 +156,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
     await publishCart({
       variables: {
-        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        id: cartId.data?.account?.cart?.id!,
       },
     });
 
@@ -175,7 +183,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
     await increaseItemQuantity({
       variables: {
-        cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        cartId: cartId.data?.account?.cart?.id!,
         cartItemId: existingItem?.id!,
         quantity: existingItem?.quantity! - 1,
       },
@@ -187,7 +195,7 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
     await publishCart({
       variables: {
-        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        id: cartId.data?.account?.cart?.id!,
       },
     });
   };
@@ -195,13 +203,13 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
   const clearCart = async () => {
     await removeItemsFromCart({
       variables: {
-        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        id: cartId.data?.account?.cart?.id!,
       },
     });
 
     await publishCart({
       variables: {
-        id: 'cl6w1lq0gkdxn0blmu6ymwfdp',
+        id: cartId.data?.account?.cart?.id!,
       },
     });
   };

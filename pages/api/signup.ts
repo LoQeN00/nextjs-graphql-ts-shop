@@ -8,6 +8,15 @@ import {
   PublishAccountDocument,
   PublishAccountMutation,
   PublishAccountMutationVariables,
+  CreateCartDocument,
+  CreateCartMutation,
+  CreateCartMutationVariables,
+  SetUsersCartDocument,
+  SetUsersCartMutation,
+  SetUsersCartMutationVariables,
+  PublishCartDocument,
+  PublishCartMutation,
+  PublishCartMutationVariables,
 } from './../../generated/graphql';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from 'next';
@@ -52,6 +61,25 @@ const handler: NextApiHandler = async (req, res) => {
     mutation: PublishAccountDocument,
     variables: {
       id: createUser.data?.createAccount?.id,
+    },
+  });
+
+  const createCart = await authorizedClient.mutate<CreateCartMutation, CreateCartMutationVariables>({
+    mutation: CreateCartDocument,
+  });
+
+  await authorizedClient.mutate<SetUsersCartMutation, SetUsersCartMutationVariables>({
+    mutation: SetUsersCartDocument,
+    variables: {
+      accountId: createUser.data.createAccount.id,
+      cartId: createCart.data?.createCart?.id!,
+    },
+  });
+
+  await authorizedClient.mutate<PublishCartMutation, PublishCartMutationVariables>({
+    mutation: PublishCartDocument,
+    variables: {
+      id: createCart.data?.createCart?.id!,
     },
   });
 

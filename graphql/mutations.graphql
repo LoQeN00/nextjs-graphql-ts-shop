@@ -110,3 +110,27 @@ mutation PublishAccount($id: ID!) {
     id
   }
 }
+
+mutation AddOrderToAccount($accountId: ID!, $orderId: ID!) {
+  updateAccount(where: { id: $accountId }, data: { orders: { connect: { where: { id: $orderId } } } }) {
+    id
+  }
+}
+
+mutation PublishAccount($id: ID!) {
+  publishAccount(to: PUBLISHED, where: { id: $id }) {
+    id
+  }
+}
+
+mutation CreateCart {
+  createCart(data: {}) {
+    id
+  }
+}
+
+mutation SetUsersCart($accountId: ID!, $cartId: ID!) {
+  updateAccount(where: { id: $accountId }, data: { cart: { connect: { id: $cartId } } }) {
+    id
+  }
+}

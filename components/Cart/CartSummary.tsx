@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useCartContext } from './useCartContext';
 import { ClipLoader } from 'react-spinners';
+import { useSession } from 'next-auth/react';
+import { useFindUserCartIdQuery } from '../../generated/graphql';
 
 type Props = {};
 
@@ -11,6 +13,14 @@ const CartSummary = (props: Props) => {
   const { items, clearCart, total } = useCartContext();
 
   const [loading, setIsLoading] = useState<boolean>(false);
+
+  const { data: session } = useSession();
+
+  const cartId = useFindUserCartIdQuery({
+    variables: {
+      id: session?.user.id!,
+    },
+  });
 
   const pay = async () => {
     setIsLoading(true);
@@ -25,12 +35,10 @@ const CartSummary = (props: Props) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
 
-      body: JSON.stringify({ cartId: 'cl6w1lq0gkdxn0blmu6ymwfdp' }),
+      body: JSON.stringify({ cartId: cartId.data?.account?.cart?.id, userId: session?.user.id }),
     });
 
     const response = await res.json();
-
-    console.log(response);
 
     await stripe.redirectToCheckout({ sessionId: response.session.id });
 

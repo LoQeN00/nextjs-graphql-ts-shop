@@ -14,6 +14,12 @@ import {
   PublishMultipleOrderItemsDocument,
   PublishMultipleOrderItemsMutation,
   PublishMultipleOrderItemsMutationVariables,
+  AddOrderToAccountDocument,
+  AddOrderToAccountMutation,
+  AddOrderToAccountMutationVariables,
+  PublishAccountDocument,
+  PublishAccountMutation,
+  PublishAccountMutationVariables,
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
@@ -27,7 +33,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const body = req.body as { cartId: string };
+  const body = req.body as { cartId: string; userId: string };
 
   const { data, error, loading } = await client.query<GetCartByIdQuery, GetCartByIdQueryVariables>({
     query: GetCartByIdDocument,
@@ -114,6 +120,21 @@ const handler: NextApiHandler = async (req, res) => {
     mutation: PublishOrderDocument,
     variables: {
       id: order.data?.order?.id!,
+    },
+  });
+
+  await client.mutate<AddOrderToAccountMutation, AddOrderToAccountMutationVariables>({
+    mutation: AddOrderToAccountDocument,
+    variables: {
+      accountId: body.userId,
+      orderId: order.data?.order?.id!,
+    },
+  });
+
+  await client.mutate<PublishAccountMutation, PublishAccountMutationVariables>({
+    mutation: PublishAccountDocument,
+    variables: {
+      id: body.userId,
     },
   });
 
