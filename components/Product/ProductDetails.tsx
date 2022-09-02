@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { NextReactMarkdown } from '../utils/NextReactMarkdown';
 import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { useCartContext } from '../Cart/useCartContext';
+import { useSession } from 'next-auth/react';
 
 interface ProductDetailsType {
   title: string;
@@ -20,6 +21,9 @@ type ProductDetailsProps = {
 
 export const ProductDetails = ({ data }: ProductDetailsProps) => {
   const { addItemToCart } = useCartContext();
+
+  const { data: session } = useSession();
+
   return (
     <div className="flex items-center justify-center flex-col space-y-8">
       <Link href="/products-graphql">
@@ -42,14 +46,18 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
         <article className="prose lg:prose-xl p-4">
           <NextReactMarkdown description={data.description} />
         </article>
-        <button
-          className="px-4 py-2 border-2 border-black rounded-2xl"
-          onClick={() =>
-            addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
-          }
-        >
-          Dodaj do koszyka
-        </button>
+        {session ? (
+          <button
+            className="px-4 py-2 border-2 border-black rounded-2xl"
+            onClick={() =>
+              addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
+            }
+          >
+            Dodaj do koszyka
+          </button>
+        ) : (
+          <p className="text-center">Musisz być zalogowany aby dodać przedmiot do koszyka</p>
+        )}
       </div>
     </div>
   );

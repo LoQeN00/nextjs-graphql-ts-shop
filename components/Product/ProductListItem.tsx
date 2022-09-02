@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useCartContext } from '../Cart/useCartContext';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface ProductDetailsType {
   id: string;
@@ -26,6 +27,8 @@ interface ProductListItemProps {
 export const ProductListItem = ({ data }: ProductListItemProps) => {
   const { addItemToCart } = useCartContext();
 
+  const { data: session } = useSession();
+
   return (
     <div className="flex flex-col justify-center items-center pb-4 group">
       <Link passHref href={`/product/${data.id}`}>
@@ -43,14 +46,18 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
       </Link>
 
       <h2 className="font-bold text-2xl p-5">{data.title}</h2>
-      <button
-        className="px-4 py-2 border-2 border-black rounded-2xl"
-        onClick={() =>
-          addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
-        }
-      >
-        Dodaj do koszyka
-      </button>
+      {session ? (
+        <button
+          className="px-4 py-2 border-2 border-black rounded-2xl"
+          onClick={() =>
+            addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
+          }
+        >
+          Dodaj do koszyka
+        </button>
+      ) : (
+        <p className="text-center">Musisz być zalogowany aby dodać przedmiot do koszyka</p>
+      )}
     </div>
   );
 };

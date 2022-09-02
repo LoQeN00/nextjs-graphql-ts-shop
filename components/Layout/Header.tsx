@@ -23,7 +23,8 @@ export const Header = (props: Props) => {
         </div>
         <p>{session?.user.email}</p>
         <div className="space-x-4">
-          <Cart />
+          {session && <Cart />}
+
           {status === 'authenticated' ? (
             <button onClick={() => signOut()}>Wyloguj</button>
           ) : (

@@ -11,6 +11,7 @@ import {
 } from '../../generated/graphql';
 import { useRouter } from 'next/router';
 import { displayToast } from '../../lib/displayToast';
+import { useSession } from 'next-auth/react';
 
 type Props = {};
 
@@ -27,6 +28,8 @@ const AddReviewForm = (props: Props) => {
   const methods = useForm<AddReviewFormData>({
     resolver: yupResolver(schema),
   });
+
+  const { data: session } = useSession();
 
   const router = useRouter();
 
@@ -99,20 +102,24 @@ const AddReviewForm = (props: Props) => {
 
   return (
     <div>
-      <FormProvider {...methods}>
-        <div>
-          <h1 className="mb-4 font-semibold text-2xl">Dodaj własną opinię</h1>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-5">
-            <Input className="w-full" id="name" label="Name" type="text" />
-            <Input className="w-full" id="email" label="Email" type="text" />
-            <Input className="w-full" id="content" label="Content" type="text" />
-            <Input className="w-full" id="rating" label="Rating" type="number" />
-            <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
-              Continue
-            </button>
-          </form>
-        </div>
-      </FormProvider>
+      {session ? (
+        <FormProvider {...methods}>
+          <div>
+            <h1 className="mb-4 font-semibold text-2xl">Dodaj własną opinię</h1>
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-5">
+              <Input className="w-full" id="name" label="Name" type="text" />
+              <Input className="w-full" id="email" label="Email" type="text" />
+              <Input className="w-full" id="content" label="Content" type="text" />
+              <Input className="w-full" id="rating" label="Rating" type="number" />
+              <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
+                Continue
+              </button>
+            </form>
+          </div>
+        </FormProvider>
+      ) : (
+        <p className="text-center">Aby dodać opinie musisz być zalogowany</p>
+      )}
     </div>
   );
 };
