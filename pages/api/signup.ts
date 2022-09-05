@@ -57,13 +57,6 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const publishUser = await authorizedClient.mutate<PublishAccountMutation, PublishAccountMutationVariables>({
-    mutation: PublishAccountDocument,
-    variables: {
-      id: createUser.data?.createAccount?.id,
-    },
-  });
-
   const createCart = await authorizedClient.mutate<CreateCartMutation, CreateCartMutationVariables>({
     mutation: CreateCartDocument,
   });
@@ -80,6 +73,13 @@ const handler: NextApiHandler = async (req, res) => {
     mutation: PublishCartDocument,
     variables: {
       id: createCart.data?.createCart?.id!,
+    },
+  });
+
+  const publishUser = await authorizedClient.mutate<PublishAccountMutation, PublishAccountMutationVariables>({
+    mutation: PublishAccountDocument,
+    variables: {
+      id: createUser.data?.createAccount?.id,
     },
   });
 
