@@ -86,3 +86,34 @@ query FindUserCartId($id: ID!) {
     }
   }
 }
+
+query FindAllAccountOrders($id: ID!) {
+  account(where: { id: $id }) {
+    orders {
+      id
+      total
+      state
+    }
+  }
+}
+
+query OrderDetails($id: ID!) {
+  order(where: { id: $id }) {
+    total
+    id
+    stripeCheckoutId
+    state
+    orderItems {
+      id
+      quantity
+      product {
+        name
+        id
+        price
+        images {
+          url
+        }
+      }
+    }
+  }
+}

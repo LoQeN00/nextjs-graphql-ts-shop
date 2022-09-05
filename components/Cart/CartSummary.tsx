@@ -44,6 +44,8 @@ const CartSummary = (props: Props) => {
 
     const response = await res.json();
 
+    if (!response.session.id) throw new Error('Something went wrong');
+
     await stripe.redirectToCheckout({ sessionId: response.session.id });
 
     setIsLoading(false);

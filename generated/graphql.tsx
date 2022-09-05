@@ -12465,6 +12465,20 @@ export type FindUserCartIdQueryVariables = Exact<{
 
 export type FindUserCartIdQuery = { __typename?: 'Query', account?: { __typename?: 'Account', cart?: { __typename?: 'Cart', id: string } | null } | null };
 
+export type FindAllAccountOrdersQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type FindAllAccountOrdersQuery = { __typename?: 'Query', account?: { __typename?: 'Account', orders: Array<{ __typename?: 'Order', id: string, total: number, state?: string | null }> } | null };
+
+export type OrderDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type OrderDetailsQuery = { __typename?: 'Query', order?: { __typename?: 'Order', total: number, id: string, stripeCheckoutId: string, state?: string | null, orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, product?: { __typename?: 'Product', name: string, id: string, price: number, images: Array<{ __typename?: 'Asset', url: string }> } | null }> } | null };
+
 
 export const CreateProductReviewDocument = gql`
     mutation CreateProductReview($review: ReviewCreateInput!) {
@@ -13417,3 +13431,92 @@ export function useFindUserCartIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type FindUserCartIdQueryHookResult = ReturnType<typeof useFindUserCartIdQuery>;
 export type FindUserCartIdLazyQueryHookResult = ReturnType<typeof useFindUserCartIdLazyQuery>;
 export type FindUserCartIdQueryResult = Apollo.QueryResult<FindUserCartIdQuery, FindUserCartIdQueryVariables>;
+export const FindAllAccountOrdersDocument = gql`
+    query FindAllAccountOrders($id: ID!) {
+  account(where: {id: $id}) {
+    orders {
+      id
+      total
+      state
+    }
+  }
+}
+    `;
+
+/**
+ * __useFindAllAccountOrdersQuery__
+ *
+ * To run a query within a React component, call `useFindAllAccountOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindAllAccountOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindAllAccountOrdersQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindAllAccountOrdersQuery(baseOptions: Apollo.QueryHookOptions<FindAllAccountOrdersQuery, FindAllAccountOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindAllAccountOrdersQuery, FindAllAccountOrdersQueryVariables>(FindAllAccountOrdersDocument, options);
+      }
+export function useFindAllAccountOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindAllAccountOrdersQuery, FindAllAccountOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindAllAccountOrdersQuery, FindAllAccountOrdersQueryVariables>(FindAllAccountOrdersDocument, options);
+        }
+export type FindAllAccountOrdersQueryHookResult = ReturnType<typeof useFindAllAccountOrdersQuery>;
+export type FindAllAccountOrdersLazyQueryHookResult = ReturnType<typeof useFindAllAccountOrdersLazyQuery>;
+export type FindAllAccountOrdersQueryResult = Apollo.QueryResult<FindAllAccountOrdersQuery, FindAllAccountOrdersQueryVariables>;
+export const OrderDetailsDocument = gql`
+    query OrderDetails($id: ID!) {
+  order(where: {id: $id}) {
+    total
+    id
+    stripeCheckoutId
+    state
+    orderItems {
+      id
+      quantity
+      product {
+        name
+        id
+        price
+        images {
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrderDetailsQuery__
+ *
+ * To run a query within a React component, call `useOrderDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOrderDetailsQuery(baseOptions: Apollo.QueryHookOptions<OrderDetailsQuery, OrderDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderDetailsQuery, OrderDetailsQueryVariables>(OrderDetailsDocument, options);
+      }
+export function useOrderDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderDetailsQuery, OrderDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderDetailsQuery, OrderDetailsQueryVariables>(OrderDetailsDocument, options);
+        }
+export type OrderDetailsQueryHookResult = ReturnType<typeof useOrderDetailsQuery>;
+export type OrderDetailsLazyQueryHookResult = ReturnType<typeof useOrderDetailsLazyQuery>;
+export type OrderDetailsQueryResult = Apollo.QueryResult<OrderDetailsQuery, OrderDetailsQueryVariables>;

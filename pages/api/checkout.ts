@@ -20,6 +20,7 @@ import {
   PublishAccountDocument,
   PublishAccountMutation,
   PublishAccountMutationVariables,
+  FindAllAccountOrdersDocument,
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
@@ -136,6 +137,14 @@ const handler: NextApiHandler = async (req, res) => {
     variables: {
       id: body.userId,
     },
+    refetchQueries: [
+      {
+        query: FindAllAccountOrdersDocument,
+        variables: {
+          id: body.userId,
+        },
+      },
+    ],
   });
 
   res.status(201).json({ session: stripeCheckoutSession });

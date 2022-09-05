@@ -20,6 +20,7 @@ export const Header = (props: Props) => {
           <Navlink href="/" text="Home" />
           <Navlink href="/about" text="About" />
           <Navlink href="/products-graphql" text="Products" />
+          <Navlink href="/orders" text="Orders" />
         </div>
         <p>{session?.user.email}</p>
         <div className="space-x-4">
