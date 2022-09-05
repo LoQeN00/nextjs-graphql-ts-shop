@@ -21,6 +21,12 @@ import {
   PublishAccountMutation,
   PublishAccountMutationVariables,
   FindAllAccountOrdersDocument,
+  ClearCartDocument,
+  ClearCartMutationVariables,
+  ClearCartMutation,
+  PublishCartDocument,
+  PublishCartMutation,
+  PublishCartMutationVariables,
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
@@ -145,6 +151,20 @@ const handler: NextApiHandler = async (req, res) => {
         },
       },
     ],
+  });
+
+  await client.mutate<ClearCartMutation, ClearCartMutationVariables>({
+    mutation: ClearCartDocument,
+    variables: {
+      id: body.cartId,
+    },
+  });
+
+  await client.mutate<PublishCartMutation, PublishCartMutationVariables>({
+    mutation: PublishCartDocument,
+    variables: {
+      id: body.cartId,
+    },
   });
 
   res.status(201).json({ session: stripeCheckoutSession });
