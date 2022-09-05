@@ -165,6 +165,14 @@ const handler: NextApiHandler = async (req, res) => {
     variables: {
       id: body.cartId,
     },
+    refetchQueries: [
+      {
+        query: GetCartByIdDocument,
+        variables: {
+          id: body.cartId,
+        },
+      },
+    ],
   });
 
   res.status(201).json({ session: stripeCheckoutSession });
