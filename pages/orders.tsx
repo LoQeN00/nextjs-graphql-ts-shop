@@ -14,9 +14,9 @@ const OrdersPage = (props: Props) => {
     variables: {
       id: session?.user.id!,
     },
+    pollInterval: 10000,
   });
 
-  console.log(data);
   return (
     <div>
       {loading && <ClipLoader color="#ffffff" />}

@@ -5,6 +5,7 @@ import {
   PublishOrderDocument,
   PublishOrderMutation,
   PublishOrderMutationVariables,
+  FindAllAccountOrdersDocument,
 } from './../../generated/graphql';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from 'next';
