@@ -82,7 +82,7 @@ mutation PublishCartItem($id: ID!) {
 }
 
 mutation PublishOrder($id: ID!) {
-  publishOrder(where: { id: $id }) {
+  publishOrder(to: PUBLISHED, where: { id: $id }) {
     id
   }
 }

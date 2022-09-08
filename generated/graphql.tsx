@@ -12872,7 +12872,7 @@ export type PublishCartItemMutationResult = Apollo.MutationResult<PublishCartIte
 export type PublishCartItemMutationOptions = Apollo.BaseMutationOptions<PublishCartItemMutation, PublishCartItemMutationVariables>;
 export const PublishOrderDocument = gql`
     mutation PublishOrder($id: ID!) {
-  publishOrder(where: {id: $id}) {
+  publishOrder(to: PUBLISHED, where: {id: $id}) {
     id
   }
 }
