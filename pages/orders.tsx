@@ -14,7 +14,7 @@ const OrdersPage = (props: Props) => {
     variables: {
       id: session?.user.id!,
     },
-    pollInterval: 10000,
+    pollInterval: 4000,
   });
 
   return (
