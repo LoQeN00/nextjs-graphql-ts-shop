@@ -15,6 +15,7 @@ const OrdersPage = (props: Props) => {
       id: session?.user.id!,
     },
     pollInterval: 4000,
+    fetchPolicy: 'network-only',
   });
 
   return (
