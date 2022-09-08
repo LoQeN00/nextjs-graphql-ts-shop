@@ -47,7 +47,7 @@ const handler: NextApiHandler = async (req, res) => {
     variables: {
       id: body.cartId,
     },
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'network-only',
   });
 
   if (!data.cart) return res.status(500).json({ message: 'Cart not found' });
