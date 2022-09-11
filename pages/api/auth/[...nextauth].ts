@@ -25,6 +25,7 @@ export default NextAuth({
           variables: {
             email: credentials?.email,
           },
+          fetchPolicy: 'network-only',
         });
 
         if (!user.data?.account?.email) return null;

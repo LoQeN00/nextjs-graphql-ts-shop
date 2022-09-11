@@ -21,14 +21,14 @@ export const authorizedClient = new ApolloClient({
   headers: {
     Authorization: `Bearer ${process.env.GRAPHCMS_TOKEN}`,
   },
-  defaultOptions: {
-    watchQuery: {
-      nextFetchPolicy(currentFetchPolicy) {
-        if (currentFetchPolicy === 'network-only' || currentFetchPolicy === 'cache-and-network') {
-          return 'cache-first';
-        }
-        return currentFetchPolicy;
-      },
-    },
-  },
+  // defaultOptions: {
+  //   watchQuery: {
+  //     nextFetchPolicy(currentFetchPolicy) {
+  //       if (currentFetchPolicy === 'network-only' || currentFetchPolicy === 'cache-and-network') {
+  //         return 'cache-first';
+  //       }
+  //       return currentFetchPolicy;
+  //     },
+  //   },
+  // },
 });
