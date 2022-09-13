@@ -26,15 +26,13 @@ const handler: NextApiHandler = async (req, res) => {
       },
     });
 
-    if (order.data?.updateOrder?.id) {
-      const publishOrder = await authorizedClient.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
-        mutation: PublishOrderDocument,
-        variables: {
-          id: order.data?.updateOrder?.id!,
-        },
-        fetchPolicy: 'network-only',
-      });
-    }
+    const publishOrder = await authorizedClient.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+      mutation: PublishOrderDocument,
+      variables: {
+        id: order.data?.updateOrder?.id!,
+      },
+      fetchPolicy: 'network-only',
+    });
   };
 
   switch (event.type) {
