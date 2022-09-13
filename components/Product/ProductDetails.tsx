@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { NextReactMarkdown } from '../utils/NextReactMarkdown';
@@ -23,6 +23,26 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
   const { addItemToCart } = useCartContext();
 
   const { data: session } = useSession();
+
+  const [disabled, setDisabled] = useState(false);
+
+  const handleAddItemToCart = async ({
+    title,
+    price,
+    id,
+    image,
+    count,
+  }: {
+    title: string;
+    price: number;
+    id: string;
+    count: number;
+    image: string;
+  }) => {
+    setDisabled(true);
+    await addItemToCart({ title, price, id, image, count });
+    setDisabled(false);
+  };
 
   return (
     <div className="flex items-center justify-center flex-col space-y-8">
@@ -49,8 +69,15 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
         {session ? (
           <button
             className="px-4 py-2 border-2 border-black rounded-2xl"
+            disabled={disabled}
             onClick={() =>
-              addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
+              handleAddItemToCart({
+                title: data.title,
+                price: data.price,
+                count: 1,
+                id: data.id,
+                image: data.thumbnailUrl,
+              })
             }
           >
             Dodaj do koszyka
