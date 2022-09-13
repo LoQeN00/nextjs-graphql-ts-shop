@@ -30,7 +30,7 @@ import {
 } from './../../generated/graphql';
 import type { NextApiHandler } from 'next';
 import { Stripe } from 'stripe';
-import { client } from '../../graphql/apolloClient';
+import { authorizedClient } from '../../graphql/apolloClient';
 
 const handler: NextApiHandler = async (req, res) => {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -42,7 +42,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const body = req.body as { cartId: string; userId: string; email: string };
 
-  const { data, error, loading } = await client.query<GetCartByIdQuery, GetCartByIdQueryVariables>({
+  const { data, error, loading } = await authorizedClient.query<GetCartByIdQuery, GetCartByIdQueryVariables>({
     query: GetCartByIdDocument,
     variables: {
       id: body.cartId,
@@ -87,7 +87,7 @@ const handler: NextApiHandler = async (req, res) => {
     return actualPrice + item.product?.price! * item.quantity;
   }, 0);
 
-  const order = await client.mutate<CreateOrderMutation, CreateOrderMutationVariables>({
+  const order = await authorizedClient.mutate<CreateOrderMutation, CreateOrderMutationVariables>({
     mutation: CreateOrderDocument,
     variables: {
       email: body.email,
@@ -106,7 +106,7 @@ const handler: NextApiHandler = async (req, res) => {
     };
   });
 
-  const updatedOrder = await client.mutate<UpdateOrderMutation, UpdateOrderMutationVariables>({
+  const updatedOrder = await authorizedClient.mutate<UpdateOrderMutation, UpdateOrderMutationVariables>({
     mutation: UpdateOrderDocument,
     variables: {
       orderId: order.data?.order?.id!,
@@ -116,21 +116,21 @@ const handler: NextApiHandler = async (req, res) => {
     },
   });
 
-  await client.mutate<PublishMultipleOrderItemsMutation, PublishMultipleOrderItemsMutationVariables>({
+  await authorizedClient.mutate<PublishMultipleOrderItemsMutation, PublishMultipleOrderItemsMutationVariables>({
     mutation: PublishMultipleOrderItemsDocument,
     variables: {
       id: order.data?.order?.id!,
     },
   });
 
-  await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+  await authorizedClient.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
     mutation: PublishOrderDocument,
     variables: {
       id: order.data?.order?.id!,
     },
   });
 
-  await client.mutate<AddOrderToAccountMutation, AddOrderToAccountMutationVariables>({
+  await authorizedClient.mutate<AddOrderToAccountMutation, AddOrderToAccountMutationVariables>({
     mutation: AddOrderToAccountDocument,
     variables: {
       accountId: body.userId,
@@ -138,7 +138,7 @@ const handler: NextApiHandler = async (req, res) => {
     },
   });
 
-  await client.mutate<PublishAccountMutation, PublishAccountMutationVariables>({
+  await authorizedClient.mutate<PublishAccountMutation, PublishAccountMutationVariables>({
     mutation: PublishAccountDocument,
     variables: {
       id: body.userId,
@@ -153,14 +153,14 @@ const handler: NextApiHandler = async (req, res) => {
     ],
   });
 
-  await client.mutate<ClearCartMutation, ClearCartMutationVariables>({
+  await authorizedClient.mutate<ClearCartMutation, ClearCartMutationVariables>({
     mutation: ClearCartDocument,
     variables: {
       id: body.cartId,
     },
   });
 
-  await client.mutate<PublishCartMutation, PublishCartMutationVariables>({
+  await authorizedClient.mutate<PublishCartMutation, PublishCartMutationVariables>({
     mutation: PublishCartDocument,
     variables: {
       id: body.cartId,
