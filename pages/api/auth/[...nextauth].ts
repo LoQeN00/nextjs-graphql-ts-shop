@@ -37,15 +37,27 @@ export default NextAuth({
         return {
           id: user.data.account?.id,
           email: user.data.account?.email,
+          name: user.data.account?.name,
+          surname: user.data.account?.surname,
         };
       },
     }),
   ],
   callbacks: {
-    async session({ session, user, token }) {
+    async session({ session, token }) {
       session.user.id = token.sub!;
-
+      if (token.surname) {
+        session.user.surname = token.surname;
+      }
+      console.log(session);
       return session;
+    },
+
+    async jwt({ token, user }) {
+      if (user?.surname) {
+        token.surname = user.surname;
+      }
+      return token;
     },
   },
 });

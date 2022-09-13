@@ -76,6 +76,8 @@ query FindAccountByEmail($email: String!) {
     id
     email
     password
+    name
+    surname
   }
 }
 

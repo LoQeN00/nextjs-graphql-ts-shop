@@ -37,6 +37,7 @@ export type Account = Node & {
   history: Array<Version>;
   /** The unique identifier */
   id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
   orders: Array<Order>;
   password: Scalars['String'];
   /** The time the document was published. Null on documents in draft stage. */
@@ -46,6 +47,7 @@ export type Account = Node & {
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
+  surname?: Maybe<Scalars['String']>;
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -130,8 +132,10 @@ export type AccountCreateInput = {
   cart?: InputMaybe<CartCreateOneInlineInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   email: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
   orders?: InputMaybe<OrderCreateManyInlineInput>;
   password: Scalars['String'];
+  surname?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -223,6 +227,25 @@ export type AccountManyWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  name_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']>;
   orders_every?: InputMaybe<OrderWhereInput>;
   orders_none?: InputMaybe<OrderWhereInput>;
   orders_some?: InputMaybe<OrderWhereInput>;
@@ -264,6 +287,25 @@ export type AccountManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  surname?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  surname_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  surname_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  surname_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  surname_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  surname_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  surname_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  surname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  surname_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  surname_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -289,10 +331,14 @@ export enum AccountOrderByInput {
   EmailDesc = 'email_DESC',
   IdAsc = 'id_ASC',
   IdDesc = 'id_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
   PasswordAsc = 'password_ASC',
   PasswordDesc = 'password_DESC',
   PublishedAtAsc = 'publishedAt_ASC',
   PublishedAtDesc = 'publishedAt_DESC',
+  SurnameAsc = 'surname_ASC',
+  SurnameDesc = 'surname_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
 }
@@ -300,8 +346,10 @@ export enum AccountOrderByInput {
 export type AccountUpdateInput = {
   cart?: InputMaybe<CartUpdateOneInlineInput>;
   email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   orders?: InputMaybe<OrderUpdateManyInlineInput>;
   password?: InputMaybe<Scalars['String']>;
+  surname?: InputMaybe<Scalars['String']>;
 };
 
 export type AccountUpdateManyInlineInput = {
@@ -322,7 +370,9 @@ export type AccountUpdateManyInlineInput = {
 };
 
 export type AccountUpdateManyInput = {
+  name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  surname?: InputMaybe<Scalars['String']>;
 };
 
 export type AccountUpdateManyWithNestedWhereInput = {
@@ -433,6 +483,25 @@ export type AccountWhereInput = {
   id_not_starts_with?: InputMaybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  name_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  name_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  name_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  name_starts_with?: InputMaybe<Scalars['String']>;
   orders_every?: InputMaybe<OrderWhereInput>;
   orders_none?: InputMaybe<OrderWhereInput>;
   orders_some?: InputMaybe<OrderWhereInput>;
@@ -474,6 +543,25 @@ export type AccountWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  surname?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  surname_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  surname_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  surname_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  surname_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  surname_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  surname_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  surname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  surname_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  surname_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -12380,6 +12468,8 @@ export type PublishMultipleOrderItemsMutation = { __typename?: 'Mutation', publi
 export type CreateAccountMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  surname?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -12456,7 +12546,7 @@ export type FindAccountByEmailQueryVariables = Exact<{
 }>;
 
 
-export type FindAccountByEmailQuery = { __typename?: 'Query', account?: { __typename?: 'Account', id: string, email: string, password: string } | null };
+export type FindAccountByEmailQuery = { __typename?: 'Query', account?: { __typename?: 'Account', id: string, email: string, password: string, name?: string | null, surname?: string | null } | null };
 
 export type FindUserCartIdQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -12943,8 +13033,10 @@ export type PublishMultipleOrderItemsMutationHookResult = ReturnType<typeof useP
 export type PublishMultipleOrderItemsMutationResult = Apollo.MutationResult<PublishMultipleOrderItemsMutation>;
 export type PublishMultipleOrderItemsMutationOptions = Apollo.BaseMutationOptions<PublishMultipleOrderItemsMutation, PublishMultipleOrderItemsMutationVariables>;
 export const CreateAccountDocument = gql`
-    mutation CreateAccount($email: String!, $password: String!) {
-  createAccount(data: {email: $email, password: $password}) {
+    mutation CreateAccount($email: String!, $password: String!, $name: String, $surname: String) {
+  createAccount(
+    data: {email: $email, password: $password, name: $name, surname: $surname}
+  ) {
     id
   }
 }
@@ -12966,6 +13058,8 @@ export type CreateAccountMutationFn = Apollo.MutationFunction<CreateAccountMutat
  *   variables: {
  *      email: // value for 'email'
  *      password: // value for 'password'
+ *      name: // value for 'name'
+ *      surname: // value for 'surname'
  *   },
  * });
  */
@@ -13363,6 +13457,8 @@ export const FindAccountByEmailDocument = gql`
     id
     email
     password
+    name
+    surname
   }
 }
     `;

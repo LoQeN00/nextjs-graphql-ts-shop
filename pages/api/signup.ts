@@ -26,9 +26,7 @@ import { hash } from 'bcryptjs';
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'POST') return res.setHeader('Allow', 'POST').status(405).json({ error: 'Method Not Allowed' });
 
-  const body = JSON.parse(req.body) as { email: string; password: string };
-
-  console.log(body);
+  const body = JSON.parse(req.body) as { email: string; password: string; name: string; surname: string };
 
   const existingUser = await authorizedClient.query<FindAccountByEmailQuery, FindAccountByEmailQueryVariables>({
     query: FindAccountByEmailDocument,
@@ -49,6 +47,8 @@ const handler: NextApiHandler = async (req, res) => {
     variables: {
       email: body.email,
       password: hashedPassword,
+      name: body.name,
+      surname: body.surname,
     },
   });
 

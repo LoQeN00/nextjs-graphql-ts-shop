@@ -11,6 +11,8 @@ type Props = {};
 const schema = yup.object().shape({
   email: yup.string().required(),
   password: yup.string().required(),
+  name: yup.string().required(),
+  surname: yup.string().required(),
 });
 
 export type SignupFormData = yup.InferType<typeof schema>;
@@ -31,6 +33,8 @@ export const SignupForm = (props: Props) => {
       body: JSON.stringify({
         email: data.email,
         password: data.password,
+        name: data.name,
+        surname: data.surname,
       }),
     });
     const json = await response.json();
@@ -52,6 +56,8 @@ export const SignupForm = (props: Props) => {
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-5">
           <Input className="w-full" id="email" label="Email" type="email" />
           <Input className="w-full" id="password" label="Password" type="password" />
+          <Input className="w-full" id="name" label="Name" type="text" />
+          <Input className="w-full" id="surname" label="Surname" type="text" />
           <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
             Zarejestruj się
           </button>
