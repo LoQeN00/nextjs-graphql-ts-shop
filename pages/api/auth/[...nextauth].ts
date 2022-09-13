@@ -49,7 +49,6 @@ export default NextAuth({
       if (token.surname) {
         session.user.surname = token.surname;
       }
-      console.log(session);
       return session;
     },
 

@@ -26,12 +26,14 @@ const handler: NextApiHandler = async (req, res) => {
       },
     });
 
-    const publishOrder = await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
-      mutation: PublishOrderDocument,
-      variables: {
-        id: order.data?.updateOrder?.id!,
-      },
-    });
+    if (order.data?.updateOrder?.id) {
+      const publishOrder = await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+        mutation: PublishOrderDocument,
+        variables: {
+          id: order.data?.updateOrder?.id!,
+        },
+      });
+    }
   };
 
   switch (event.type) {
