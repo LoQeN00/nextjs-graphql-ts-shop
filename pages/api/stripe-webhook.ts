@@ -9,13 +9,13 @@ import {
 } from './../../generated/graphql';
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiHandler } from 'next';
-import { client } from '../../graphql/apolloClient';
+import { authorizedClient } from '../../graphql/apolloClient';
 
 const handler: NextApiHandler = async (req, res) => {
   const event = req.body;
 
   const changeOrderStatus = async (id: string) => {
-    const order = await client.mutate<
+    const order = await authorizedClient.mutate<
       UpdateOrderByStripeCheckoutIdMutation,
       UpdateOrderByStripeCheckoutIdMutationVariables
     >({
@@ -27,7 +27,7 @@ const handler: NextApiHandler = async (req, res) => {
     });
 
     if (order.data?.updateOrder?.id) {
-      const publishOrder = await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
+      const publishOrder = await authorizedClient.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
         mutation: PublishOrderDocument,
         variables: {
           id: order.data?.updateOrder?.id!,
