@@ -32,6 +32,7 @@ const handler: NextApiHandler = async (req, res) => {
         variables: {
           id: order.data?.updateOrder?.id!,
         },
+        fetchPolicy: 'network-only',
       });
     }
   };
