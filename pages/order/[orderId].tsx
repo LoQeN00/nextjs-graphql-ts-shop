@@ -52,7 +52,7 @@ const OrderDetailsPage = (props: Props) => {
                 <p>x{item.quantity}</p>
               </div>
               <div className="flex items-center">
-                <p>{item.product?.price}</p>
+                <p>{item.product?.price! * item.quantity}</p>
               </div>
             </div>
           );
