@@ -34,6 +34,10 @@ mutation UpdateOrderByStripeCheckoutId($stripeCheckoutId: String!, $state: Strin
   updateOrder(where: { stripeCheckoutId: $stripeCheckoutId }, data: { state: $state }) {
     id
   }
+
+  publishOrder(to: PUBLISHED, where: { stripeCheckoutId: $stripeCheckoutId }) {
+    id
+  }
 }
 
 mutation AddItemToCart($cartId: ID!, $productId: ID!) {

@@ -12404,7 +12404,7 @@ export type UpdateOrderByStripeCheckoutIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOrderByStripeCheckoutIdMutation = { __typename?: 'Mutation', updateOrder?: { __typename?: 'Order', id: string } | null };
+export type UpdateOrderByStripeCheckoutIdMutation = { __typename?: 'Mutation', updateOrder?: { __typename?: 'Order', id: string } | null, publishOrder?: { __typename?: 'Order', id: string } | null };
 
 export type AddItemToCartMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -12719,6 +12719,9 @@ export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<UpdateOrderM
 export const UpdateOrderByStripeCheckoutIdDocument = gql`
     mutation UpdateOrderByStripeCheckoutId($stripeCheckoutId: String!, $state: String!) {
   updateOrder(where: {stripeCheckoutId: $stripeCheckoutId}, data: {state: $state}) {
+    id
+  }
+  publishOrder(to: PUBLISHED, where: {stripeCheckoutId: $stripeCheckoutId}) {
     id
   }
 }
