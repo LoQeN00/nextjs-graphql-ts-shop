@@ -57,9 +57,12 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
 
   const { data: session } = useSession();
 
-  const cartId = useFindUserCartIdQuery({ variables: { id: session?.user.id! } });
+  const cartId = useFindUserCartIdQuery({ variables: { id: session?.user.id! }, fetchPolicy: 'network-only' });
 
-  const { data } = useGetCartByIdQuery({ variables: { id: cartId.data?.account?.cart?.id! } });
+  const { data } = useGetCartByIdQuery({
+    variables: { id: cartId.data?.account?.cart?.id! },
+    fetchPolicy: 'network-only',
+  });
 
   const [insertItemToCart] = useAddItemToCartMutation();
   const [increaseItemQuantity] = useIncreaseItemQuantityMutation();
