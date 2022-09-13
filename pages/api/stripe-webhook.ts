@@ -24,20 +24,14 @@ const handler: NextApiHandler = async (req, res) => {
         stripeCheckoutId: id,
         state: 'PAID',
       },
-      fetchPolicy: 'network-only',
     });
-
-    console.log(order);
 
     const publishOrder = await client.mutate<PublishOrderMutation, PublishOrderMutationVariables>({
       mutation: PublishOrderDocument,
       variables: {
         id: order.data?.updateOrder?.id!,
       },
-      fetchPolicy: 'network-only',
     });
-
-    console.log(publishOrder);
   };
 
   switch (event.type) {
