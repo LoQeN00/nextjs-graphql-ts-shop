@@ -60,12 +60,19 @@ query GetCartById($id: ID!) {
 query FindOrderByStripeCheckoutId($id: String!) {
   order(where: { stripeCheckoutId: $id }) {
     total
-    email
+    id
+    stripeCheckoutId
     state
     orderItems {
+      id
       quantity
       product {
         name
+        id
+        price
+        images {
+          url
+        }
       }
     }
   }

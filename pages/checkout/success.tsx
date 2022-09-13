@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { useFindOrderByStripeCheckoutIdQuery } from '../../generated/graphql';
+import { OrderItem } from '../../components/Order/OrderItem';
 
 type Props = {};
 
@@ -21,7 +22,12 @@ const SuccessPage = (props: Props) => {
 
   return (
     <div>
-      <h1>SuccessPage</h1>
+      <h1 className="text-3xl font-bold mb-4">Zamówienie zostało złożone</h1>
+      <h2 className="font-semibold">Status Zamówienia: {data?.order?.state}</h2>
+      <h2 className="font-semibold">Zamówione Przedmioty:</h2>
+      {data?.order?.orderItems.map((item) => {
+        return <OrderItem key={item.id} item={item} />;
+      })}
     </div>
   );
 };

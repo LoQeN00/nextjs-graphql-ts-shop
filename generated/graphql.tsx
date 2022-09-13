@@ -12539,7 +12539,7 @@ export type FindOrderByStripeCheckoutIdQueryVariables = Exact<{
 }>;
 
 
-export type FindOrderByStripeCheckoutIdQuery = { __typename?: 'Query', order?: { __typename?: 'Order', total: number, email: string, state?: string | null, orderItems: Array<{ __typename?: 'OrderItem', quantity: number, product?: { __typename?: 'Product', name: string } | null }> } | null };
+export type FindOrderByStripeCheckoutIdQuery = { __typename?: 'Query', order?: { __typename?: 'Order', total: number, id: string, stripeCheckoutId: string, state?: string | null, orderItems: Array<{ __typename?: 'OrderItem', id: string, quantity: number, product?: { __typename?: 'Product', name: string, id: string, price: number, images: Array<{ __typename?: 'Asset', url: string }> } | null }> } | null };
 
 export type FindAccountByEmailQueryVariables = Exact<{
   email: Scalars['String'];
@@ -13415,12 +13415,19 @@ export const FindOrderByStripeCheckoutIdDocument = gql`
     query FindOrderByStripeCheckoutId($id: String!) {
   order(where: {stripeCheckoutId: $id}) {
     total
-    email
+    id
+    stripeCheckoutId
     state
     orderItems {
+      id
       quantity
       product {
         name
+        id
+        price
+        images {
+          url
+        }
       }
     }
   }
