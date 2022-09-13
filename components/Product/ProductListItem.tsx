@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useCartContext } from '../Cart/useCartContext';
 import Link from 'next/link';
@@ -26,8 +26,27 @@ interface ProductListItemProps {
 
 export const ProductListItem = ({ data }: ProductListItemProps) => {
   const { addItemToCart } = useCartContext();
+  const [disabled, setDisabled] = useState(false);
 
   const { data: session } = useSession();
+
+  const handleAddItemToCart = async ({
+    title,
+    price,
+    id,
+    image,
+    count,
+  }: {
+    title: string;
+    price: number;
+    id: string;
+    count: number;
+    image: string;
+  }) => {
+    setDisabled(true);
+    await addItemToCart({ title, price, id, image, count });
+    setDisabled(false);
+  };
 
   return (
     <div className="flex flex-col justify-center items-center pb-4 group">
@@ -49,8 +68,15 @@ export const ProductListItem = ({ data }: ProductListItemProps) => {
       {session ? (
         <button
           className="px-4 py-2 border-2 border-black rounded-2xl"
+          disabled={disabled}
           onClick={() =>
-            addItemToCart({ title: data.title, price: data.price, count: 1, id: data.id, image: data.thumbnailUrl })
+            handleAddItemToCart({
+              title: data.title,
+              price: data.price,
+              count: 1,
+              id: data.id,
+              image: data.thumbnailUrl,
+            })
           }
         >
           Dodaj do koszyka
