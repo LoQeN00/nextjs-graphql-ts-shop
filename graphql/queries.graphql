@@ -36,6 +36,7 @@ query GetProductReviews($id: ID!) {
     content
     rating
     name
+    surname
   }
 }
 

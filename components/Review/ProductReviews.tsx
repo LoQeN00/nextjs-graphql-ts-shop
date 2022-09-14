@@ -29,7 +29,9 @@ const ProductReviews = ({}: Props) => {
               className="space-y-2 flex justify-between items-center bg-gray-200 shadow-xl px-6 py-4 rounded-lg"
             >
               <div>
-                <h2 className="font-bold text-xl">{review.name}</h2>
+                <h2 className="font-bold text-xl">
+                  {review.name} {review.surname}
+                </h2>
                 <p>{review.content}</p>
               </div>
               {review.rating && <Stars stars={review.rating} />}

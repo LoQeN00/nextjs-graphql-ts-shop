@@ -10317,7 +10317,6 @@ export type Review = Node & {
   createdBy?: Maybe<User>;
   /** Get the document in other stages */
   documentInStages: Array<Review>;
-  email: Scalars['String'];
   headline: Scalars['String'];
   /** List of Review versions */
   history: Array<Version>;
@@ -10333,6 +10332,7 @@ export type Review = Node & {
   scheduledIn: Array<ScheduledOperation>;
   /** System stage field */
   stage: Stage;
+  surname?: Maybe<Scalars['String']>;
   /** The time the document was updated */
   updatedAt: Scalars['DateTime'];
   /** User that last updated this document */
@@ -10404,11 +10404,11 @@ export type ReviewConnection = {
 export type ReviewCreateInput = {
   content: Scalars['String'];
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  email: Scalars['String'];
   headline: Scalars['String'];
   name: Scalars['String'];
   product?: InputMaybe<ProductCreateOneInlineInput>;
   rating?: InputMaybe<Scalars['Int']>;
+  surname?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -10480,25 +10480,6 @@ export type ReviewManyWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
-  email?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  email_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  email_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  email_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  email_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  email_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  email_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  email_starts_with?: InputMaybe<Scalars['String']>;
   headline?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   headline_contains?: InputMaybe<Scalars['String']>;
@@ -10591,6 +10572,25 @@ export type ReviewManyWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  surname?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  surname_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  surname_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  surname_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  surname_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  surname_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  surname_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  surname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  surname_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  surname_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -10614,8 +10614,6 @@ export enum ReviewOrderByInput {
   ContentDesc = 'content_DESC',
   CreatedAtAsc = 'createdAt_ASC',
   CreatedAtDesc = 'createdAt_DESC',
-  EmailAsc = 'email_ASC',
-  EmailDesc = 'email_DESC',
   HeadlineAsc = 'headline_ASC',
   HeadlineDesc = 'headline_DESC',
   IdAsc = 'id_ASC',
@@ -10626,17 +10624,19 @@ export enum ReviewOrderByInput {
   PublishedAtDesc = 'publishedAt_DESC',
   RatingAsc = 'rating_ASC',
   RatingDesc = 'rating_DESC',
+  SurnameAsc = 'surname_ASC',
+  SurnameDesc = 'surname_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC'
 }
 
 export type ReviewUpdateInput = {
   content?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
   headline?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   product?: InputMaybe<ProductUpdateOneInlineInput>;
   rating?: InputMaybe<Scalars['Int']>;
+  surname?: InputMaybe<Scalars['String']>;
 };
 
 export type ReviewUpdateManyInlineInput = {
@@ -10658,10 +10658,10 @@ export type ReviewUpdateManyInlineInput = {
 
 export type ReviewUpdateManyInput = {
   content?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
   headline?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   rating?: InputMaybe<Scalars['Int']>;
+  surname?: InputMaybe<Scalars['String']>;
 };
 
 export type ReviewUpdateManyWithNestedWhereInput = {
@@ -10752,25 +10752,6 @@ export type ReviewWhereInput = {
   /** All values that are not contained in given list. */
   createdAt_not_in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
   createdBy?: InputMaybe<UserWhereInput>;
-  email?: InputMaybe<Scalars['String']>;
-  /** All values containing the given string. */
-  email_contains?: InputMaybe<Scalars['String']>;
-  /** All values ending with the given string. */
-  email_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are contained in given list. */
-  email_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values that are not equal to given value. */
-  email_not?: InputMaybe<Scalars['String']>;
-  /** All values not containing the given string. */
-  email_not_contains?: InputMaybe<Scalars['String']>;
-  /** All values not ending with the given string */
-  email_not_ends_with?: InputMaybe<Scalars['String']>;
-  /** All values that are not contained in given list. */
-  email_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  /** All values not starting with the given string. */
-  email_not_starts_with?: InputMaybe<Scalars['String']>;
-  /** All values starting with the given string. */
-  email_starts_with?: InputMaybe<Scalars['String']>;
   headline?: InputMaybe<Scalars['String']>;
   /** All values containing the given string. */
   headline_contains?: InputMaybe<Scalars['String']>;
@@ -10863,6 +10844,25 @@ export type ReviewWhereInput = {
   scheduledIn_every?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_none?: InputMaybe<ScheduledOperationWhereInput>;
   scheduledIn_some?: InputMaybe<ScheduledOperationWhereInput>;
+  surname?: InputMaybe<Scalars['String']>;
+  /** All values containing the given string. */
+  surname_contains?: InputMaybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  surname_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  surname_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values that are not equal to given value. */
+  surname_not?: InputMaybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  surname_not_contains?: InputMaybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  surname_not_ends_with?: InputMaybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  surname_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  surname_not_starts_with?: InputMaybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  surname_starts_with?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
@@ -12525,7 +12525,7 @@ export type GetProductReviewsQueryVariables = Exact<{
 }>;
 
 
-export type GetProductReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', id: string, headline: string, content: string, rating?: number | null, name: string }> };
+export type GetProductReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', id: string, headline: string, content: string, rating?: number | null, name: string, surname?: string | null }> };
 
 export type GetCartByIdQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -13333,6 +13333,7 @@ export const GetProductReviewsDocument = gql`
     content
     rating
     name
+    surname
   }
 }
     `;

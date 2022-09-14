@@ -17,8 +17,6 @@ type Props = {};
 
 const schema = yup.object().shape({
   content: yup.string().required(),
-  name: yup.string().required(),
-  email: yup.string().required(),
   rating: yup.number().required(),
 });
 
@@ -35,30 +33,30 @@ const AddReviewForm = (props: Props) => {
 
   const [createProductReview] = useCreateProductReviewMutation();
   const [publishProductReview] = usePublishProductReviewMutation({
-    // refetchQueries: [
-    //   {
+    refetchQueries: [
+      {
+        query: GetProductReviewsDocument,
+        variables: { id: router.query.productId as string },
+      },
+    ],
+    // update(cache, result) {
+    //   const originalReviewsQuery = cache.readQuery<GetProductReviewsQuery>({
     //     query: GetProductReviewsDocument,
     //     variables: { id: router.query.productId as string },
-    //   }
-    // ],
-    update(cache, result) {
-      const originalReviewsQuery = cache.readQuery<GetProductReviewsQuery>({
-        query: GetProductReviewsDocument,
-        variables: { id: router.query.productId as string },
-      });
+    //   });
 
-      if (!originalReviewsQuery || !result.data?.review) return;
+    //   if (!originalReviewsQuery || !result.data?.review) return;
 
-      const newReviews = [result.data.review, ...originalReviewsQuery.reviews];
+    //   const newReviews = [result.data.review, ...originalReviewsQuery.reviews];
 
-      cache.writeQuery({
-        query: GetProductReviewsDocument,
-        variables: { id: router.query.productId as string },
-        data: {
-          reviews: newReviews,
-        },
-      });
-    },
+    //   cache.writeQuery({
+    //     query: GetProductReviewsDocument,
+    //     variables: { id: router.query.productId as string },
+    //     data: {
+    //       reviews: newReviews,
+    //     },
+    //   });
+    // },
   });
 
   const onSubmit = async (data: AddReviewFormData) => {
@@ -66,9 +64,9 @@ const AddReviewForm = (props: Props) => {
       variables: {
         review: {
           content: data.content,
-          email: data.email,
           rating: data.rating,
-          name: data.name,
+          name: session?.user.name!,
+          surname: session?.user.surname,
           headline: data.content,
           product: {
             connect: {
@@ -83,17 +81,17 @@ const AddReviewForm = (props: Props) => {
 
     await publishProductReview({
       variables: { reviewId: reviewData.data?.review?.id! },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        review: {
-          __typename: 'Review',
-          id: reviewData.data?.review?.id!,
-          headline: data.content,
-          content: data.content,
-          name: data.name,
-          rating: data.rating,
-        },
-      },
+      // optimisticResponse: {
+      //   __typename: 'Mutation',
+      //   review: {
+      //     __typename: 'Review',
+      //     id: reviewData.data?.review?.id!,
+      //     headline: data.content,
+      //     content: data.content,
+      //     name: session?.user.name!,
+      //     rating: data.rating,
+      //   },
+      // },
     });
 
     methods.reset();
@@ -107,8 +105,6 @@ const AddReviewForm = (props: Props) => {
           <div>
             <h1 className="mb-4 font-semibold text-2xl">Dodaj własną opinię</h1>
             <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-5">
-              <Input className="w-full" id="name" label="Name" type="text" />
-              <Input className="w-full" id="email" label="Email" type="text" />
               <Input className="w-full" id="content" label="Content" type="text" />
               <Input className="w-full" id="rating" label="Rating" type="number" />
               <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
