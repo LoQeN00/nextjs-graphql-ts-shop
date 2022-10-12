@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo, useCallback } from 'react';
 import {
   GetCartByIdDocument,
   useAddItemToCartMutation,
@@ -126,18 +126,34 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
     setCartItems(cartItems);
   }, [data]);
 
-  // if (!data) return null;
+  const addItemToCart = useCallback(
+    async (product: CartItem) => {
+      const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === product.id);
+      if (!existingItem) {
+        displayToast(`Successfully Added ${product.title} to your cart !`);
+        const cartItem = await insertItemToCart({
+          variables: { cartId: cartId.data?.account?.cart?.id!, productId: product.id },
+        });
 
-  const addItemToCart = async (product: CartItem) => {
-    const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === product.id);
-    if (!existingItem) {
-      displayToast(`Successfully Added ${product.title} to your cart !`);
-      const cartItem = await insertItemToCart({
-        variables: { cartId: cartId.data?.account?.cart?.id!, productId: product.id },
-      });
+        await publishCartItem({
+          variables: { id: cartItem.data?.updateCart?.cartItems[cartItem.data?.updateCart?.cartItems.length - 1].id! },
+        });
 
-      await publishCartItem({
-        variables: { id: cartItem.data?.updateCart?.cartItems[cartItem.data?.updateCart?.cartItems.length - 1].id! },
+        await publishCart({
+          variables: {
+            id: cartId.data?.account?.cart?.id!,
+          },
+        });
+
+        return;
+      }
+
+      await increaseItemQuantity({
+        variables: {
+          cartId: cartId.data?.account?.cart?.id!,
+          cartItemId: existingItem?.id!,
+          quantity: existingItem?.quantity! + 1,
+        },
       });
 
       await publishCart({
@@ -146,64 +162,66 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
         },
       });
 
-      return;
-    }
+      displayToast(`Increased quantity of ${product.title} to ${existingItem?.quantity! + 1} in your cart !`);
 
-    await increaseItemQuantity({
-      variables: {
-        cartId: cartId.data?.account?.cart?.id!,
-        cartItemId: existingItem?.id!,
-        quantity: existingItem?.quantity! + 1,
-      },
-    });
+      await publishCartItem({
+        variables: { id: existingItem?.id! },
+      });
+    },
+    [
+      cartId.data?.account?.cart?.id,
+      data?.cart?.cartItems,
+      increaseItemQuantity,
+      insertItemToCart,
+      publishCart,
+      publishCartItem,
+    ]
+  );
 
-    await publishCart({
-      variables: {
-        id: cartId.data?.account?.cart?.id!,
-      },
-    });
+  const removeItemFromCart = useCallback(
+    async (id: CartItem['id']) => {
+      const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === id);
+      if (!existingItem) return;
 
-    displayToast(`Increased quantity of ${product.title} to ${existingItem?.quantity! + 1} in your cart !`);
+      if (existingItem.quantity === 1) {
+        await deleteItemFromCart({
+          variables: {
+            id: existingItem?.id!,
+          },
+        });
 
-    await publishCartItem({
-      variables: { id: existingItem?.id! },
-    });
-  };
+        return;
+      }
 
-  const removeItemFromCart = async (id: CartItem['id']) => {
-    const existingItem = data?.cart?.cartItems.find((existingItem) => existingItem.product?.id === id);
-    if (!existingItem) return;
-
-    if (existingItem.quantity === 1) {
-      await deleteItemFromCart({
+      await increaseItemQuantity({
         variables: {
-          id: existingItem?.id!,
+          cartId: cartId.data?.account?.cart?.id!,
+          cartItemId: existingItem?.id!,
+          quantity: existingItem?.quantity! - 1,
         },
       });
 
-      return;
-    }
+      await publishCartItem({
+        variables: { id: existingItem?.id! },
+      });
 
-    await increaseItemQuantity({
-      variables: {
-        cartId: cartId.data?.account?.cart?.id!,
-        cartItemId: existingItem?.id!,
-        quantity: existingItem?.quantity! - 1,
-      },
-    });
+      await publishCart({
+        variables: {
+          id: cartId.data?.account?.cart?.id!,
+        },
+      });
+    },
+    [
+      cartId.data?.account?.cart?.id,
+      data?.cart?.cartItems,
+      deleteItemFromCart,
+      increaseItemQuantity,
+      publishCart,
+      publishCartItem,
+    ]
+  );
 
-    await publishCartItem({
-      variables: { id: existingItem?.id! },
-    });
-
-    await publishCart({
-      variables: {
-        id: cartId.data?.account?.cart?.id!,
-      },
-    });
-  };
-
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     await removeItemsFromCart({
       variables: {
         id: cartId.data?.account?.cart?.id!,
@@ -215,11 +233,15 @@ export const CartContextProvider = ({ children }: CartProviderProps) => {
         id: cartId.data?.account?.cart?.id!,
       },
     });
-  };
+  }, [cartId.data?.account?.cart?.id, publishCart, removeItemsFromCart]);
 
-  const total = cartItems.reduce((actualPrice, item) => {
-    return actualPrice + item.price * item.count;
-  }, 0);
+  const total = useMemo(
+    () =>
+      cartItems.reduce((actualPrice, item) => {
+        return actualPrice + item.price * item.count;
+      }, 0),
+    [cartItems]
+  );
 
   const value = {
     items: cartItems,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { NextReactMarkdown } from '../utils/NextReactMarkdown';
@@ -26,23 +26,26 @@ export const ProductDetails = ({ data }: ProductDetailsProps) => {
 
   const [disabled, setDisabled] = useState(false);
 
-  const handleAddItemToCart = async ({
-    title,
-    price,
-    id,
-    image,
-    count,
-  }: {
-    title: string;
-    price: number;
-    id: string;
-    count: number;
-    image: string;
-  }) => {
-    setDisabled(true);
-    await addItemToCart({ title, price, id, image, count });
-    setDisabled(false);
-  };
+  const handleAddItemToCart = useCallback(
+    async ({
+      title,
+      price,
+      id,
+      image,
+      count,
+    }: {
+      title: string;
+      price: number;
+      id: string;
+      count: number;
+      image: string;
+    }) => {
+      setDisabled(true);
+      await addItemToCart({ title, price, id, image, count });
+      setDisabled(false);
+    },
+    [addItemToCart]
+  );
 
   return (
     <div className="flex items-center justify-center flex-col space-y-8">

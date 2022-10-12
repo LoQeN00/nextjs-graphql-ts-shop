@@ -3,7 +3,7 @@ import { Cart } from '../Cart/Cart';
 import { useDetectScrollDirection } from '../../hooks/useDetectScrollDirection';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 type Props = {};
 
@@ -13,9 +13,9 @@ export const Header = (props: Props) => {
 
   const [navbarIsOpened, setNavbarIsOpened] = useState(false);
 
-  const toggleOpenNavbar = () => setNavbarIsOpened((prevState) => !prevState);
+  const toggleOpenNavbar = useCallback(() => setNavbarIsOpened((prevState) => !prevState), [setNavbarIsOpened]);
 
-  const closeNavbar = () => setNavbarIsOpened(false);
+  const closeNavbar = useCallback(() => setNavbarIsOpened(false), [setNavbarIsOpened]);
 
   return (
     <header

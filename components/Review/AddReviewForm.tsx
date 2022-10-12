@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -39,64 +39,45 @@ const AddReviewForm = (props: Props) => {
         variables: { id: router.query.productId as string },
       },
     ],
-    // update(cache, result) {
-    //   const originalReviewsQuery = cache.readQuery<GetProductReviewsQuery>({
-    //     query: GetProductReviewsDocument,
-    //     variables: { id: router.query.productId as string },
-    //   });
-
-    //   if (!originalReviewsQuery || !result.data?.review) return;
-
-    //   const newReviews = [result.data.review, ...originalReviewsQuery.reviews];
-
-    //   cache.writeQuery({
-    //     query: GetProductReviewsDocument,
-    //     variables: { id: router.query.productId as string },
-    //     data: {
-    //       reviews: newReviews,
-    //     },
-    //   });
-    // },
   });
 
-  const onSubmit = async (data: AddReviewFormData) => {
-    const reviewData = await createProductReview({
-      variables: {
-        review: {
-          content: data.content,
-          rating: data.rating,
-          name: session?.user.name!,
-          surname: session?.user.surname,
-          headline: data.content,
-          product: {
-            connect: {
-              id: router.query.productId as string,
+  const onSubmit = useCallback(
+    async (data: AddReviewFormData) => {
+      const reviewData = await createProductReview({
+        variables: {
+          review: {
+            content: data.content,
+            rating: data.rating,
+            name: session?.user.name!,
+            surname: session?.user.surname,
+            headline: data.content,
+            product: {
+              connect: {
+                id: router.query.productId as string,
+              },
             },
           },
         },
-      },
-    });
+      });
 
-    if (!reviewData) return;
+      if (!reviewData) return;
 
-    await publishProductReview({
-      variables: { reviewId: reviewData.data?.review?.id! },
-      // optimisticResponse: {
-      //   __typename: 'Mutation',
-      //   review: {
-      //     __typename: 'Review',
-      //     id: reviewData.data?.review?.id!,
-      //     headline: data.content,
-      //     content: data.content,
-      //     name: session?.user.name!,
-      //     rating: data.rating,
-      //   },
-      // },
-    });
+      await publishProductReview({
+        variables: { reviewId: reviewData.data?.review?.id! },
+      });
 
-    methods.reset();
-    displayToast('Opinia została dodana i czeka na weryfikację');
-  };
+      methods.reset();
+      displayToast('Opinia została dodana i czeka na weryfikację');
+    },
+    [
+      createProductReview,
+      methods,
+      publishProductReview,
+      router.query.productId,
+      session?.user.name,
+      session?.user.surname,
+    ]
+  );
 
   return (
     <div>

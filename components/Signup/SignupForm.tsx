@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useForm, useFormContext, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -26,23 +26,26 @@ export const SignupForm = (props: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data: SignupFormData) => {
-    console.log(data);
-    const response = await fetch('/api/signup', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-        name: data.name,
-        surname: data.surname,
-      }),
-    });
-    const json = await response.json();
+  const onSubmit = useCallback(
+    async (data: SignupFormData) => {
+      console.log(data);
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          name: data.name,
+          surname: data.surname,
+        }),
+      });
+      const json = await response.json();
 
-    if (json.ok) {
-      router.push('/api/auth/signin');
-    }
-  };
+      if (json.ok) {
+        router.push('/api/auth/signin');
+      }
+    },
+    [router]
+  );
 
   if (status === 'authenticated') {
     signIn('credentials');
