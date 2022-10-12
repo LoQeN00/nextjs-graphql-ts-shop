@@ -15,6 +15,8 @@ export const Header = (props: Props) => {
 
   const toggleOpenNavbar = () => setNavbarIsOpened((prevState) => !prevState);
 
+  const closeNavbar = () => setNavbarIsOpened(false);
+
   return (
     <header
       className={`bg-gray-700 w-full fixed z-10 transition-all ease-in ${
@@ -33,14 +35,14 @@ export const Header = (props: Props) => {
           {session && <Cart />}
 
           {status === 'authenticated' ? (
-            <button onClick={() => signOut()}>Wyloguj</button>
+            <button onClick={() => signOut()}>Logout</button>
           ) : (
             <div className="space-x-4">
               <button className="bg-teal-500 px-4 py-2 rounded-xl" onClick={() => signIn()}>
-                Zaloguj
+                Sign In
               </button>
               <Link href="/signup">
-                <button className="bg-teal-500 px-4 py-2 rounded-xl">Zarejestruj się</button>
+                <button className="bg-teal-500 px-4 py-2 rounded-xl">Sign Out</button>
               </Link>
             </div>
           )}
@@ -65,9 +67,25 @@ export const Header = (props: Props) => {
           </div>
         </div>
         <div className={`${navbarIsOpened ? 'block' : 'hidden'} flex flex-col space-y-2`}>
-          <Navlink href="/about" text="About" />
-          <Navlink href="/products-graphql" text="Products" />
-          <Navlink href="/orders" text="Orders" />
+          <Navlink href="/about" text="About" onClick={closeNavbar} />
+          <Navlink href="/products-graphql" text="Products" onClick={closeNavbar} />
+          <Navlink href="/orders" text="Orders" onClick={closeNavbar} />
+          {status === 'unauthenticated' ? (
+            <>
+              <button className="bg-teal-500 px-4 py-2 rounded-xl" onClick={() => signIn()}>
+                Sign In
+              </button>
+              <Link href="/signup">
+                <button className="bg-teal-500 px-4 py-2 rounded-xl" onClick={closeNavbar}>
+                  Sign Up
+                </button>
+              </Link>
+            </>
+          ) : (
+            <button className="bg-teal-500 px-4 py-2 rounded-xl" onClick={() => signOut()}>
+              Logout
+            </button>
+          )}
         </div>
       </nav>
     </header>
