@@ -2,6 +2,7 @@ import { Navlink } from '../utils/Navlink';
 import { Cart } from '../Cart/Cart';
 import { useDetectScrollDirection } from '../../hooks/useDetectScrollDirection';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import Link from 'next/link';
 
 type Props = {};
 
@@ -29,7 +30,12 @@ export const Header = (props: Props) => {
           {status === 'authenticated' ? (
             <button onClick={() => signOut()}>Wyloguj</button>
           ) : (
-            <button onClick={() => signIn()}>Zaloguj</button>
+            <>
+              <button onClick={() => signIn()}>Zaloguj</button>
+              <Link href="/signup">
+                <button>Zarejestruj się</button>
+              </Link>
+            </>
           )}
         </div>
       </nav>

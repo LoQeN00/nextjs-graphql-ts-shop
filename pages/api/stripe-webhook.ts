@@ -26,8 +26,6 @@ const handler: NextApiHandler = async (req, res) => {
   const signature = req.headers['stripe-signature'];
   const stripeKey = process.env.STRIPE_SECRET_KEY;
 
-  console.log(body);
-
   if (!stripeKey) {
     res.status(500).json({ message: 'MISSING STRIPE KEY' });
     return;
