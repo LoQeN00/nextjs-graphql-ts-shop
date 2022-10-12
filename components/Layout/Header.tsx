@@ -42,7 +42,7 @@ export const Header = (props: Props) => {
                 Sign In
               </button>
               <Link href="/signup">
-                <button className="bg-teal-500 px-4 py-2 rounded-xl">Sign Out</button>
+                <button className="bg-teal-500 px-4 py-2 rounded-xl">Sign Up</button>
               </Link>
             </div>
           )}
