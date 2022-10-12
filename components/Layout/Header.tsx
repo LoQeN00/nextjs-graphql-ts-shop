@@ -30,12 +30,14 @@ export const Header = (props: Props) => {
           {status === 'authenticated' ? (
             <button onClick={() => signOut()}>Wyloguj</button>
           ) : (
-            <>
-              <button onClick={() => signIn()}>Zaloguj</button>
+            <div className="space-x-4">
+              <button className="bg-teal-500 px-4 py-2 rounded-xl" onClick={() => signIn()}>
+                Zaloguj
+              </button>
               <Link href="/signup">
-                <button>Zarejestruj się</button>
+                <button className="bg-teal-500 px-4 py-2 rounded-xl">Zarejestruj się</button>
               </Link>
-            </>
+            </div>
           )}
         </div>
       </nav>

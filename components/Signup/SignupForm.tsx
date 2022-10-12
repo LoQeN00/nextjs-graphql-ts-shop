@@ -58,16 +58,18 @@ export const SignupForm = (props: Props) => {
           <Input className="w-full" id="password" label="Password" type="password" />
           <Input className="w-full" id="name" label="Name" type="text" />
           <Input className="w-full" id="surname" label="Surname" type="text" />
-          <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
-            Zarejestruj się
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 rounded-full bg-blue-700 text-white"
-            onClick={() => signIn('credentials')}
-          >
-            Masz konto? Zaloguj się
-          </button>
+          <div className="space-x-6">
+            <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
+              Zarejestruj się
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-full bg-blue-700 text-white"
+              onClick={() => signIn('credentials')}
+            >
+              Masz konto? Zaloguj się
+            </button>
+          </div>
         </form>
       </div>
     </FormProvider>
