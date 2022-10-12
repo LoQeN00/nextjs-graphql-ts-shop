@@ -62,21 +62,32 @@ const CartSummary = (props: Props) => {
         >
           Clear cart
         </button>
-        {items.length > 0 && (
-          <button
-            className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center flex justify-between items-center space-x-4"
-            onClick={pay}
-          >
-            {loading ? (
-              <>
-                {' '}
-                Loading <ClipLoader color="#ffffff" />{' '}
-              </>
-            ) : (
-              'Go to Checkout'
-            )}
-          </button>
-        )}
+        {items.length > 0 &&
+          // <button
+          //   className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center flex justify-between items-center space-x-4"
+          //   onClick={pay}
+          // >
+          //   {loading ? (
+          //     <>
+          //       {' '}
+          //       Loading <ClipLoader color="#ffffff" />{' '}
+          //     </>
+          //   ) : (
+          //     'Go to Checkout'
+          //   )}
+          // </button>
+          (loading ? (
+            <button className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center flex justify-between items-center space-x-4">
+              Loading <ClipLoader color="#ffffff" />
+            </button>
+          ) : (
+            <button
+              className="px-4 py-3 rounded-full bg-blue-700 text-white text-md lg:text-lg max-w-[200px] text-center"
+              onClick={pay}
+            >
+              Go to Checkout
+            </button>
+          ))}
       </div>
     </div>
   );
