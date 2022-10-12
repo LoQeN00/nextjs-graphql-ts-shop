@@ -50,7 +50,7 @@ export const Header = (props: Props) => {
       </nav>
       <nav className="md:hidden flex flex-col p-4 text-white space-y-2">
         <div className="flex justify-between">
-          <Navlink href="/" text="Home" />
+          <Navlink href="/" text="Home" onClick={closeNavbar} />
           <div className="flex space-x-4">
             {session && <Cart />}
             <svg
