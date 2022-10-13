@@ -61,7 +61,7 @@ export const SignupForm = (props: Props) => {
           <Input className="w-full" id="password" label="Password" type="password" />
           <Input className="w-full" id="name" label="Name" type="text" />
           <Input className="w-full" id="surname" label="Surname" type="text" />
-          <div className="space-x-6">
+          <div className="flex flex-col space-y-4 justify-center sm:block sm:space-y-0 sm:space-x-4">
             <button type="submit" className="px-4 py-2 rounded-full bg-blue-700 text-white">
               Zarejestruj się
             </button>
