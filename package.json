@@ -20,7 +20,7 @@
     "bcryptjs": "^2.4.3",
     "graphql": "^16.5.0",
     "next": "12.1.6",
-    "next-auth": "^4.10.3",
+    "next-auth": "^4.20.1",
     "next-mdx-remote": "^4.0.3",
     "next-seo": "^5.4.0",
     "react": "^17.0.2",
